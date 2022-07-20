@@ -1,18 +1,32 @@
 package pl.lotto.numberreceiver;
 
+import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.uuidgenerator.UuidGenerator;
+import pl.lotto.numberreceiver.validator.NumberValidatorFacade;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 
 public class NumberReceiverFacade {
+    private final NumberValidatorFacade numberValidatorFacade = new NumberValidatorFacade();
+    private final Randomable randomable;
+
+    public NumberReceiverFacade() {
+        this.randomable = new UuidGenerator();
+    }
+
+    //Constructor for test purposes
+    public NumberReceiverFacade(Randomable randomable) {
+        this.randomable = randomable;
+    }
 
     public NumberReceiverResultDto inputNumbers(List<Integer> numbersFromUser) {
-        if (numbersFromUser.size() == 6) {
-            Optional<UUID> generateRandomId = Optional.of(UUID.fromString("5fc155ba-078d-11ed-861d-0242ac120002"));
-            return new NumberReceiverResultDto("correct message", generateRandomId);
-        } else {
-            return new NumberReceiverResultDto("failed message", Optional.empty());
+        if (numbersFromUser == null) {
+            return new NumberReceiverResultDto("error", Optional.empty());
         }
+        String message = numberValidatorFacade.generateMessageFromReceivedInput(numbersFromUser);
+        Optional<UUID> uuid = randomable.generateOptionalUuid(message);
+        return new NumberReceiverResultDto(message, uuid);
     }
 }
