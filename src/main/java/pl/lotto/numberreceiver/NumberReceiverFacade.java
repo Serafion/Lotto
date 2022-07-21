@@ -10,23 +10,23 @@ import java.util.UUID;
 
 public class NumberReceiverFacade {
     private final NumberValidatorFacade numberValidatorFacade = new NumberValidatorFacade();
-    private final Randomable randomable;
+    private final UuidGenerator generator;
 
     public NumberReceiverFacade() {
-        this.randomable = new UuidGenerator();
+        this.generator = new UuidGenerator();
     }
 
     //Constructor for test purposes
-    public NumberReceiverFacade(Randomable randomable) {
-        this.randomable = randomable;
+    public NumberReceiverFacade(UuidGenerator generator) {
+        this.generator = generator;
     }
 
     public NumberReceiverResultDto inputNumbers(List<Integer> numbersFromUser) {
-        if (numbersFromUser == null) {
-            return new NumberReceiverResultDto("error", Optional.empty());
-        }
+//        if (numbersFromUser == null) {
+//            return new NumberReceiverResultDto("error", Optional.empty());
+//        }
         String message = numberValidatorFacade.generateMessageFromReceivedInput(numbersFromUser);
-        Optional<UUID> uuid = randomable.generateOptionalUuid(message);
+        Optional<UUID> uuid = generator.generateOptionalUuid(message);
         return new NumberReceiverResultDto(message, uuid);
     }
 }
