@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.lotto.numberreceiver.configuration.Configuration;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.uuidgenerator.UuidGenerator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 class NumberReceiverFacadeSpec {
 
@@ -20,8 +23,9 @@ class NumberReceiverFacadeSpec {
     @DisplayName("should accept numbers from user and return correct message when entered six numbers in range")
     public void should_return_correct_message() {
         // given
-        Randomable stub = new UuidGeneratorTest(Optional.of(UUID.fromString("5fc155ba-078d-11ed-861d-0242ac120002")));
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(stub);
+        UuidGenerator uuidGenerator = mock(UuidGenerator.class);
+        given(uuidGenerator.generateOptionalUuid(Configuration.CORRECT_MESSAGE)).willReturn(Optional.of(UUID.fromString("5fc155ba-078d-11ed-861d-0242ac120002")));
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(uuidGenerator);
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 3, 4, 5, 6);
 
         // when
@@ -121,7 +125,7 @@ class NumberReceiverFacadeSpec {
         assertThat(result).isEqualTo(expectedResult);
     }
     @Test
-    @DisplayName("should return failed message if provided with no numbers")
+    @DisplayName("should return failed message if provided with no numbers - null condition")
     public void should_return_failed_message_if_got_null_value() {
         // given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade();
@@ -131,7 +135,7 @@ class NumberReceiverFacadeSpec {
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
 
         // then
-        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto("error", Optional.empty());
+        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(Configuration.FAILED_DID_NOTE_RECEIVED_EXACTLY_SIX_NUMBERS, Optional.empty());
         assertThat(result).isEqualTo(expectedResult);
     }
 
