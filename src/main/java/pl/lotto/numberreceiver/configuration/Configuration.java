@@ -8,6 +8,7 @@ public class Configuration {
 
     public static final int lowNumberBoundry = 1;
     public static final int highNumberBoundry = 99;
+    public static final int numbersToDraw = 6;
 
     public Configuration() {
     }

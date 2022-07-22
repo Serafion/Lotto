@@ -22,9 +22,6 @@ public class NumberReceiverFacade {
     }
 
     public NumberReceiverResultDto inputNumbers(List<Integer> numbersFromUser) {
-//        if (numbersFromUser == null) {
-//            return new NumberReceiverResultDto("error", Optional.empty());
-//        }
         String message = numberValidatorFacade.generateMessageFromReceivedInput(numbersFromUser);
         Optional<UUID> uuid = generator.generateOptionalUuid(message);
         return new NumberReceiverResultDto(message, uuid);

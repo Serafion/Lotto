@@ -7,18 +7,11 @@ import java.util.UUID;
 
 class UuidGeneratorModel {
 
-    private Optional<UUID> uuid;
-
     public Optional<UUID> retriveOptional(String message) {
         if (message.equals(Configuration.CORRECT_MESSAGE)) {
-            setUuidToRandom();
-        } else {
-            this.uuid = Optional.empty();
+            return Optional.of(UUID.randomUUID());
         }
-        return uuid;
+        return Optional.empty();
     }
 
-    private void setUuidToRandom() {
-        this.uuid = Optional.of(UUID.randomUUID());
-    }
 }
