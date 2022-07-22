@@ -6,12 +6,13 @@ import java.util.UUID;
 public class UuidGenerator {
 
 
-    private UuidGeneratorModel model;
+    private final UuidGeneratorModel model;
 
     public UuidGenerator() {
         this.model = new UuidGeneratorModel();
     }
 
+    //Test purposes
     public UuidGenerator(UuidGeneratorModel model) {
         this.model = model;
     }
