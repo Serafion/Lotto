@@ -3,7 +3,7 @@ package pl.lotto.numberreceiver.validator;
 import java.util.ArrayList;
 import java.util.List;
 
-class ValidatorModel {
+public class ValidatorModel {
 
 
     public String retriveMessageForGivenInput(List<Integer> list) {
@@ -12,7 +12,6 @@ class ValidatorModel {
     }
 
     private ValidateCondition returnConditionForInput(List<Integer> list) {
-
         List<ValidateCondition> validateConditions = conditionChecker(list);
         for (ValidateCondition i : validateConditions) {
             if (!i.equals(ValidateCondition.CORRECT_INPUT)) {

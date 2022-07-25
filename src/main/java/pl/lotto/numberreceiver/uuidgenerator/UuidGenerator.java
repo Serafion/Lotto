@@ -3,8 +3,7 @@ package pl.lotto.numberreceiver.uuidgenerator;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UuidGenerator {
-
+public class UuidGenerator implements UuidGenerable {
 
     private final UuidGeneratorModel model;
 
@@ -17,7 +16,8 @@ public class UuidGenerator {
         this.model = model;
     }
 
-    public Optional<UUID> generateOptionalUuid(String message) {
+    @Override
+    public Optional<UUID> generateRandom(String message) {
         return model.retriveOptional(message);
     }
 }
