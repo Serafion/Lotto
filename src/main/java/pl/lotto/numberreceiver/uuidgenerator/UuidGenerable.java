@@ -5,5 +5,5 @@ import java.util.UUID;
 
 public interface UuidGenerable {
 
-    Optional<UUID> generateRandom(String message);
+    Optional<UUID> generateRandom(String validCondition);
 }
