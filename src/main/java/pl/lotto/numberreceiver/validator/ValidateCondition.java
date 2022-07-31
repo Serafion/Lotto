@@ -3,13 +3,13 @@ package pl.lotto.numberreceiver.validator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import static pl.lotto.numberreceiver.configuration.Constants.CORRECT_MESSAGE;
-import static pl.lotto.numberreceiver.configuration.Constants.FAILED_CONTAINING_NUMBER_NOT_IN_RANGE;
-import static pl.lotto.numberreceiver.configuration.Constants.FAILED_CONTAINS_A_DUPLICATE_NUMBER;
-import static pl.lotto.numberreceiver.configuration.Constants.FAILED_DID_NOTE_RECEIVED_EXACTLY_SIX_NUMBERS;
-import static pl.lotto.numberreceiver.configuration.Constants.HIGH_NUMBER_BOUNDRY;
-import static pl.lotto.numberreceiver.configuration.Constants.LOW_NUMBER_BOUNDRY;
-import static pl.lotto.numberreceiver.configuration.Constants.NUMBERS_TO_DRAW;
+import static pl.lotto.numberreceiver.constants.Constants.CORRECT_MESSAGE;
+import static pl.lotto.numberreceiver.constants.Constants.FAILED_CONTAINING_NUMBER_NOT_IN_RANGE;
+import static pl.lotto.numberreceiver.constants.Constants.FAILED_CONTAINS_A_DUPLICATE_NUMBER;
+import static pl.lotto.numberreceiver.constants.Constants.FAILED_DID_NOTE_RECEIVED_EXACTLY_SIX_NUMBERS;
+import static pl.lotto.numberreceiver.constants.Constants.HIGH_NUMBER_BOUNDRY;
+import static pl.lotto.numberreceiver.constants.Constants.LOW_NUMBER_BOUNDRY;
+import static pl.lotto.numberreceiver.constants.Constants.NUMBERS_TO_DRAW;
 
 enum ValidateCondition {
     CORRECT_INPUT {
@@ -26,13 +26,10 @@ enum ValidateCondition {
 
         @Override
         ValidateCondition validateCondition(List<Integer> list) {
-            if (list != null) {
                 int listLength = list.size();
                 int numbersCount = countNumbersFromUser(list);
                 return listLength == numbersCount ? ValidateCondition.CORRECT_INPUT : ValidateCondition.LIST_CONTAINS_DUPLICATES;
-            }
-            return ValidateCondition.LIST_LESS_OR_BIGGER_THEN_SIX_NUMBERS_OR_NULL;
-        }
+         }
     },
     LIST_CONTAINS_NUMBER_OUT_OF_RANGE {
         @Override
@@ -42,7 +39,6 @@ enum ValidateCondition {
 
         @Override
         ValidateCondition validateCondition(List<Integer> list) {
-            if (list != null) {
                 int listLength = list.size();
                 int listLengthOfValidNumbers = 0;
                 for (Integer i : list) {
@@ -54,8 +50,6 @@ enum ValidateCondition {
                     }
                 }
                 return listLength == listLengthOfValidNumbers ? ValidateCondition.CORRECT_INPUT : ValidateCondition.LIST_CONTAINS_NUMBER_OUT_OF_RANGE;
-            }
-            return ValidateCondition.LIST_LESS_OR_BIGGER_THEN_SIX_NUMBERS_OR_NULL;
         }
     },
     LIST_LESS_OR_BIGGER_THEN_SIX_NUMBERS_OR_NULL {
@@ -66,10 +60,8 @@ enum ValidateCondition {
 
         @Override
         ValidateCondition validateCondition(List<Integer> list) {
-            if (list != null) {
+
                 return list.size() == NUMBERS_TO_DRAW ? ValidateCondition.CORRECT_INPUT : ValidateCondition.LIST_LESS_OR_BIGGER_THEN_SIX_NUMBERS_OR_NULL;
-            }
-            return ValidateCondition.LIST_LESS_OR_BIGGER_THEN_SIX_NUMBERS_OR_NULL;
         }
     };
 
