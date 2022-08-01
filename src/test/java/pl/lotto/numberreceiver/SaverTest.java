@@ -1,5 +1,6 @@
 package pl.lotto.numberreceiver;
 
+import java.util.Map;
 import pl.lotto.numberreceiver.datastorage.Savable;
 import pl.lotto.numberreceiver.datastorage.UserInput;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class SaverTest implements Savable {
     @Override
-    public void saveToFile(HashMap<LocalDateTime, List<UserInput>> map) {
+    public void save(Map<LocalDateTime, List<UserInput>> map) {
 
     }
 }

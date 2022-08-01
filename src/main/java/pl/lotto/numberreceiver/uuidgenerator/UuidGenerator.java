@@ -2,7 +2,6 @@ package pl.lotto.numberreceiver.uuidgenerator;
 
 import java.util.Optional;
 import java.util.UUID;
-
 import static pl.lotto.numberreceiver.constants.Constants.CORRECT_MESSAGE;
 
 public class UuidGenerator implements UuidGenerable {

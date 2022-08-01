@@ -60,7 +60,6 @@ enum ValidateCondition {
 
         @Override
         ValidateCondition validateCondition(List<Integer> list) {
-
                 return list.size() == NUMBERS_TO_DRAW ? ValidateCondition.CORRECT_INPUT : ValidateCondition.LIST_LESS_OR_BIGGER_THEN_SIX_NUMBERS_OR_NULL;
         }
     };

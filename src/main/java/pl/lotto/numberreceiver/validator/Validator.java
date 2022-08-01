@@ -7,14 +7,13 @@ import static pl.lotto.numberreceiver.validator.ValidateCondition.CORRECT_INPUT;
 
 public class Validator {
 
-
-    public String retriveMessageForGivenInput(List<Integer> list) {
-        ValidateCondition condition = returnConditionForInput(list);
+    public String retriveMessageForGivenInput(List<Integer> numbersFromUser) {
+        ValidateCondition condition = validateCondition(numbersFromUser);
         return condition.retrieveMessage();
     }
 
-    private ValidateCondition returnConditionForInput(List<Integer> list) {
-        List<ValidateCondition> validateConditions = conditionChecker(list);
+    private ValidateCondition validateCondition(List<Integer> numbersFromUser) {
+        List<ValidateCondition> validateConditions = conditionChecker(numbersFromUser);
         for (ValidateCondition i : validateConditions) {
             if (!i.equals(CORRECT_INPUT)) {
                 return i;
