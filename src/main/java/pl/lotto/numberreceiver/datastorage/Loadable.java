@@ -1,9 +1,9 @@
 package pl.lotto.numberreceiver.datastorage;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface Loadable {
-    HashMap<LocalDateTime, List<UserInput>> loadDatabase();
+    Map<LocalDateTime, List<UserInput>> fetch();
 }

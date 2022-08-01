@@ -12,7 +12,7 @@ class NumberSaver implements Serializable, Savable {
     }
 
     @Override
-    public void saveToFile(HashMap<LocalDateTime, List<UserInput>> map) {
+    public void save(HashMap<LocalDateTime, List<UserInput>> map) {
         try (ObjectOutputStream inputedNumbers = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("userinput.dat")))) {
             inputedNumbers.writeObject(map);
         } catch (IOException e) {

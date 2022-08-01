@@ -4,11 +4,12 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 class NumberLoader implements Loadable{
     @Override
-    public HashMap<LocalDateTime,List <UserInput>> loadDatabase(){
+    public Map<LocalDateTime,List <UserInput>> fetch(){
         try(ObjectInputStream numbersDatabase = new ObjectInputStream(new BufferedInputStream(new FileInputStream("userinput.dat")))) {
             boolean eof = false;
             while (!eof) {

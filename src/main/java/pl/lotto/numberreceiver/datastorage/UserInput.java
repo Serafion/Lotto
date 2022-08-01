@@ -5,5 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-public record UserInput(String message, List<Integer> numbersFromUser, UUID uniqueLotteryID) implements Serializable {
+record UserInput(String message,
+                 List<Integer> numbersFromUser,
+                 UUID uniqueLotteryID) implements Serializable {
 }
