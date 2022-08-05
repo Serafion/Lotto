@@ -1,25 +1,42 @@
 package pl.lotto.numberreceiver.dategenerator;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import static pl.lotto.numberreceiver.constants.Constants.DRAW_DAY_OF_WEEK;
-import static pl.lotto.numberreceiver.constants.Constants.HOUR_OF_DRAW;
-import static pl.lotto.numberreceiver.constants.Constants.MINUTE_OF_DRAW;
-import static pl.lotto.numberreceiver.constants.Constants.SECOND_OF_DRAW;
 
-public class DateGenerator {
+import static pl.lotto.numberreceiver.constants.Constants.*;
 
-    private final LocalDateTime currentTime = LocalDateTime.now();
+public class DateGenerator implements Clockable {
 
-    public LocalDateTime retrieveNextDrawDate() {
-        LocalDateTime dateOfDraw = retrieveDayOfDraw(currentTime.getDayOfMonth());
-        while (!dateOfDraw.getDayOfWeek().equals(DRAW_DAY_OF_WEEK) || (dateOfDraw.compareTo(currentTime) < 0)) {
-            dateOfDraw = dateOfDraw.plusDays(1);
-        }
-        return dateOfDraw;
+    private final Clock clock;
+
+    public DateGenerator(Clock clock) {
+        this.clock = clock;
     }
 
-    private LocalDateTime retrieveDayOfDraw(int dayOfDraw) {
+    @Override
+    public Long retrieveNextDrawDate() {
+        Long currentTime = clock.instant().toEpochMilli();
+        return fetchDrawDateInEpochMili(currentTime);
+    }
+
+    private Long fetchDrawDateInEpochMili(Long currentTime) {
+        LocalDateTime drawDay = retrieveDayOfDraw(convertToLocalDateTime(currentTime).getDayOfMonth(), currentTime);
+        while (!drawDay.getDayOfWeek().equals(DRAW_DAY_OF_WEEK) || (drawDay.compareTo(convertToLocalDateTime(currentTime)) < 0)) {
+            drawDay = drawDay.plusDays(1);
+        }
+        Instant instant = drawDay.atZone(clock.getZone()).toInstant();
+        return instant.toEpochMilli();
+    }
+
+    private LocalDateTime retrieveDayOfDraw(int dayOfDraw, Long currentDateInEpochMili) {
+        LocalDateTime currentTime = Instant.ofEpochMilli(currentDateInEpochMili).atZone(clock.getZone()).toLocalDateTime();
         return LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), dayOfDraw, HOUR_OF_DRAW, MINUTE_OF_DRAW
                 , SECOND_OF_DRAW);
+    }
+
+    private LocalDateTime convertToLocalDateTime(Long currentTime) {
+        return Instant.ofEpochMilli(currentTime)
+                .atZone(clock.getZone()).toLocalDateTime();
     }
 }

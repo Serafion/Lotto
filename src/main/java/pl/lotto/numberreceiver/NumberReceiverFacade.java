@@ -1,47 +1,60 @@
 package pl.lotto.numberreceiver;
 
-import java.time.LocalDateTime;
+import pl.lotto.numberreceiver.dategenerator.Clockable;
+import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.repository.InputService;
+import pl.lotto.numberreceiver.uuidgenerator.UuidGenerable;
+import pl.lotto.numberreceiver.validator.Validable;
+import pl.lotto.numberreceiver.validator.ValidateMessage;
+
+import java.time.Clock;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import pl.lotto.numberreceiver.datastorage.UserInputService;
-import pl.lotto.numberreceiver.dategenerator.DateGenerator;
-import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.numberreceiver.messageprovider.MessageProvider;
-import pl.lotto.numberreceiver.uuidgenerator.UuidGenerable;
-import pl.lotto.numberreceiver.validator.Validator;
 
 public class NumberReceiverFacade {
-    private final Validator validator;
+    private final Validable validator;
     private final UuidGenerable generator;
-    private final DateGenerator dateGenerator = new DateGenerator();
-    private final MessageProvider messenger = new MessageProvider();
-    private final UserInputService storage;
+    private final Clockable dateGenerator;
+    private final InputService storage;
 
-    NumberReceiverFacade(Validator validator, UuidGenerable generator, UserInputService storage) {
+
+    public NumberReceiverFacade(Validable validator, UuidGenerable generator, Clockable dateGenerator, InputService storage) {
         this.validator = validator;
         this.generator = generator;
+        this.dateGenerator = dateGenerator;
         this.storage = storage;
     }
 
     public NumberReceiverResultDto inputNumbers(List<Integer> numbersFromUser) {
-        String validationMessage = validator.retriveMessageForGivenInput(numbersFromUser);
-//        if(!validationMessage.isEmpty) {
-//            NumberReceiverResultDto dto = new NumberReceiverResultDto("too few numbers", Optional.empty(), numbersFromUser);
-//        }
-        Optional<UUID> uuid = generator.generateRandom(validationMessage);
-        String message = messenger.provideMessage(numbersFromUser, uuid, validationMessage);
-        NumberReceiverResultDto dto = new NumberReceiverResultDto(message, uuid, numbersFromUser);
+        ValidateMessage validationMessage = validator.retrieveMessageForGivenInput(numbersFromUser);
+        return fetchDto(numbersFromUser, validationMessage);
+    }
+
+    private NumberReceiverResultDto fetchDto(List<Integer> numbersFromUser, ValidateMessage validationMessage) {
+        if (!validationMessage.equals(ValidateMessage.CORRECT_MESSAGE)) {
+            return EmptyDto(numbersFromUser, validationMessage);
+        }
+        return ValidDto(numbersFromUser, validationMessage);
+    }
+
+    private NumberReceiverResultDto EmptyDto(List<Integer> numbersFromUser, ValidateMessage validationMessage) {
+        return new NumberReceiverResultDto(validationMessage, Optional.empty(), numbersFromUser, Optional.empty());
+    }
+
+    private NumberReceiverResultDto ValidDto(List<Integer> numbersFromUser, ValidateMessage validationMessage) {
+        Optional<UUID> uuid = generator.generateRandom();
+        Optional<Long> dateOfDraw = Optional.of(dateGenerator.retrieveNextDrawDate());
+        NumberReceiverResultDto dto = new NumberReceiverResultDto(validationMessage, uuid, numbersFromUser, dateOfDraw);
         storage.addToCurrentNumberList(dto);
-        storage.closeStorage();
         return dto;
     }
 
-    public LocalDateTime outputDrawTime() {
+    public Long outputDrawTime() {
         return dateGenerator.retrieveNextDrawDate();
     }
 
-    public List<NumberReceiverResultDto> retrieveNumbersForDate(LocalDateTime date) {
+    public List<NumberReceiverResultDto> retrieveNumbersForDate(Clock date) {
         return storage.provideNumbersForDate(date);
     }
 }
