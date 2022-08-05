@@ -3,8 +3,7 @@ package pl.lotto.numberreceiver.dategenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
+import java.time.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,14 +12,15 @@ class DateGeneratorTest {
     @DisplayName("Should show next Saturday as date of draw")
     void should_display_next_saturday_after_today(){
         //given
-        DateGenerator dateGenerator = new DateGenerator();
+        Clock clock = Clock.fixed(Instant.ofEpochMilli(1659772800000L),ZoneId.systemDefault());
+        DateGenerator dateGenerator = new DateGenerator(clock);
 
         //when
-        LocalDateTime date_of_draw = dateGenerator.retrieveNextDrawDate();
+        Long date_of_draw = dateGenerator.retrieveNextDrawDate();
 
         //then
-        assertThat(date_of_draw.getDayOfWeek()).isEqualTo(DayOfWeek.SATURDAY);
-        assertThat(date_of_draw).isAfter(LocalDateTime.now());
+        assertThat(Instant.ofEpochMilli(date_of_draw).atZone(ZoneId.of(clock.getZone().getId())).getDayOfWeek()).isEqualTo(DayOfWeek.SATURDAY);
+        assertThat(date_of_draw).isEqualTo(1659780000000L);
     }
 
 }

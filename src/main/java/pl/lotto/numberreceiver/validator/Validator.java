@@ -3,30 +3,25 @@ package pl.lotto.numberreceiver.validator;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pl.lotto.numberreceiver.validator.ValidateCondition.CORRECT_INPUT;
+public class Validator implements Validable {
 
-public class Validator {
-
-    public String retriveMessageForGivenInput(List<Integer> numbersFromUser) {
-        ValidateCondition condition = validateCondition(numbersFromUser);
-        return condition.retrieveMessage();
-    }
-
-    private ValidateCondition validateCondition(List<Integer> numbersFromUser) {
-        List<ValidateCondition> validateConditions = conditionChecker(numbersFromUser);
-        for (ValidateCondition i : validateConditions) {
-            if (!i.equals(CORRECT_INPUT)) {
-                return i;
+    @Override
+    public ValidateMessage retrieveMessageForGivenInput(List<Integer> numbersFromUser) {
+        List<Conditionable> validateConditions = fetchConditionList(numbersFromUser);
+        for (Conditionable i : validateConditions) {
+            ValidateMessage conditionMessage = i.validateCondition(numbersFromUser);
+            if (!conditionMessage.equals(ValidateMessage.CORRECT_MESSAGE)) {
+                return conditionMessage;
             }
         }
-        return CORRECT_INPUT;
+        return ValidateMessage.CORRECT_MESSAGE;
     }
 
-    private List<ValidateCondition> conditionChecker(List<Integer> list) {
-        List<ValidateCondition> checkedConditions = new ArrayList<>();
-        for (ValidateCondition conditionToCheck : ValidateCondition.values()) {
-            checkedConditions.add(conditionToCheck.validateCondition(list));
-        }
-        return checkedConditions;
+    private List<Conditionable> fetchConditionList(List<Integer> list) {
+        List<Conditionable> conditions = new ArrayList<>();
+        conditions.add(new CheckDuplicates());
+        conditions.add(new CheckForSixNumbers());
+        conditions.add(new CheckNumbersRange());
+        return conditions;
     }
 }

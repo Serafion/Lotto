@@ -1,9 +1,11 @@
 package pl.lotto.numberreceiver.dto;
 
+import pl.lotto.numberreceiver.validator.ValidateMessage;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public record NumberReceiverResultDto(String message, Optional<UUID> uniqueLotteryId, List<Integer> userNumbers) {
+public record NumberReceiverResultDto(ValidateMessage message, Optional<UUID> uniqueLotteryId,
+                                      List<Integer> userNumbers, Optional<Long> dateOfDraw) {
 }
-//record not serializable due to Optional
