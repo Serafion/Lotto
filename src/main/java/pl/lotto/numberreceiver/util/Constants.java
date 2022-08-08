@@ -1,4 +1,4 @@
-package pl.lotto.numberreceiver.constants;
+package pl.lotto.numberreceiver.util;
 
 import java.time.DayOfWeek;
 

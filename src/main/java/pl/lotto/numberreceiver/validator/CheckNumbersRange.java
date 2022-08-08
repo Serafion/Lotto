@@ -2,7 +2,7 @@ package pl.lotto.numberreceiver.validator;
 
 import java.util.List;
 
-import static pl.lotto.numberreceiver.constants.Constants.*;
+import static pl.lotto.numberreceiver.util.Constants.*;
 
 class CheckNumbersRange implements Conditionable {
     @Override

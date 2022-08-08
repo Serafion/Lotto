@@ -3,10 +3,12 @@ package pl.lotto.numberreceiver.dategenerator;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import static pl.lotto.numberreceiver.util.Constants.DRAW_DAY_OF_WEEK;
+import static pl.lotto.numberreceiver.util.Constants.HOUR_OF_DRAW;
+import static pl.lotto.numberreceiver.util.Constants.MINUTE_OF_DRAW;
+import static pl.lotto.numberreceiver.util.Constants.SECOND_OF_DRAW;
 
-import static pl.lotto.numberreceiver.constants.Constants.*;
-
-public class DateGenerator implements Clockable {
+public class DateGenerator {
 
     private final Clock clock;
 
@@ -14,7 +16,6 @@ public class DateGenerator implements Clockable {
         this.clock = clock;
     }
 
-    @Override
     public Long retrieveNextDrawDate() {
         Long currentTime = clock.instant().toEpochMilli();
         return fetchDrawDateInEpochMili(currentTime);

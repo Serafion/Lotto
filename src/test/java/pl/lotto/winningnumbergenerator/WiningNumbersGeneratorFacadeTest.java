@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static pl.lotto.numberreceiver.constants.Constants.*;
+import static pl.lotto.numberreceiver.util.Constants.*;
 
 class WiningNumbersGeneratorFacadeTest {
 
@@ -25,6 +25,7 @@ class WiningNumbersGeneratorFacadeTest {
         //Then
         assertThat(numbersGenerated.size()).isEqualTo(6);
     }
+
     @Test
     @DisplayName("Should return zero numbers when invalid date provided")
     void shouldReturnZeroDrawNumbersWhenInvalidDate() {
