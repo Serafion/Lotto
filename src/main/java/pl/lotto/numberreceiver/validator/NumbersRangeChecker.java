@@ -4,7 +4,7 @@ import java.util.List;
 
 import static pl.lotto.numberreceiver.util.Constants.*;
 
-class CheckNumbersRange implements Conditionable {
+class NumbersRangeChecker implements Conditionable {
     @Override
     public ValidateMessage validateCondition(List<Integer> list) {
         int listLength = list.size();
@@ -19,6 +19,7 @@ class CheckNumbersRange implements Conditionable {
         }
         return listLength == listLengthOfValidNumbers ? ValidateMessage.CORRECT_MESSAGE : ValidateMessage.NUMBERS_OUT_OF_RANGE;
     }
+
     boolean isInRange(Integer number) {
         return number >= LOW_NUMBER_BOUNDRY && number <= HIGH_NUMBER_BOUNDRY;
     }
