@@ -7,8 +7,8 @@ public class Validator implements Validable {
 
     List<Conditionable> conditions = asList(
             new DuplicateChecker(),
-            new CheckForSixNumbers(),
-            new CheckNumbersRange()
+            new NumberQuantityChecker(),
+            new NumbersRangeChecker()
     );
 
     @Override
