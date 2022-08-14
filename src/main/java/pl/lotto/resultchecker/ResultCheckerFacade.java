@@ -10,6 +10,7 @@ import pl.lotto.winningnumbergenerator.WiningNumbersGeneratorFacade;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -44,7 +45,8 @@ public class ResultCheckerFacade {
         }
         List<NumberReceiverResultDto> inputs = importer.fetchNewTickets();
         List<Integer> wonNumbers = importer.fetchWonNumbers();
-        return calculator.calculateResults(inputs, wonNumbers);
+        Map<UUID, WonNumbersCount> map = calculator.calculateResults(inputs, wonNumbers);
+        return map.containsKey(uuid) ? map : new HashMap<>();
     }
 
 

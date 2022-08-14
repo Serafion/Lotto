@@ -22,11 +22,15 @@ public class ResultCalculator implements Calculatable {
     private Map<UUID, WonNumbersCount> generateWinningContent() {
         Map<UUID, WonNumbersCount> map = new HashMap<>();
         for (NumberReceiverResultDto dto : inputs) {
-            UUID uuid = dto.uniqueLotteryId().get();
-            WonNumbersCount count = calculateWonNumbers(winningNumbers, dto.userNumbers());
-            map.put(uuid, count);
+            addContent(map, dto);
         }
         return map;
+    }
+
+    private void addContent(Map<UUID, WonNumbersCount> map, NumberReceiverResultDto dto) {
+        UUID uuid = dto.uniqueLotteryId().get();
+        WonNumbersCount count = calculateWonNumbers(winningNumbers, dto.userNumbers());
+        map.put(uuid, count);
     }
 
     private WonNumbersCount calculateWonNumbers(List<Integer> input, List<Integer> wonNumbers) {
