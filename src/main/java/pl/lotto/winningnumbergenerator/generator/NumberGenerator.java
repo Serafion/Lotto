@@ -1,12 +1,9 @@
 package pl.lotto.winningnumbergenerator.generator;
 
-import pl.lotto.winningnumbergenerator.repository.WinningNumbersService;
+import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import static pl.lotto.winningnumbergenerator.util.Constants.*;
 
@@ -15,16 +12,13 @@ public class NumberGenerator implements Randomable {
 
     Set<Integer> numbersGenerated = new HashSet<>();
     Random random = new Random();
-    WinningNumbersService numbersService;
 
-    public NumberGenerator(WinningNumbersService numbersService) {
-
-        this.numbersService = numbersService;
+    public NumberGenerator() {
 
     }
 
-    public List<Integer> generateNumbersToRepository(LocalDateTime dateTime) {
-        return numbersService.saveWinningNumbers(dateTime,fetchNumbers());
+    public NumberReceiverResultDto generateNumbers(LocalDateTime dateTime) {
+        return new NumberReceiverResultDto("", Optional.empty(), fetchNumbers(), Optional.of(dateTime));
     }
 
     private List<Integer> fetchNumbers() {

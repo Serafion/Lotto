@@ -1,8 +1,9 @@
 package pl.lotto.winningnumbergenerator.generator;
 
+import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface Randomable {
-    List<Integer> generateNumbersToRepository(LocalDateTime dateTime);
+    NumberReceiverResultDto generateNumbers(LocalDateTime dateTime);
 }

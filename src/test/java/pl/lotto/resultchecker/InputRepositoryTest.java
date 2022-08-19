@@ -13,7 +13,7 @@ public class InputRepositoryTest implements InputRepository {
     }
 
     @Override
-    public Map<UUID, WonNumbersCount> retrieveData() {
+    public Map<UUID, WonNumbersCount> retrieveAllData() {
         return new HashMap<>();
     }
 
@@ -25,5 +25,10 @@ public class InputRepositoryTest implements InputRepository {
     @Override
     public void updateData(Map<UUID, WonNumbersCount> data) {
 
+    }
+
+    @Override
+    public Map<UUID, WonNumbersCount> retrieveData(UUID uuid) {
+        return null;
     }
 }

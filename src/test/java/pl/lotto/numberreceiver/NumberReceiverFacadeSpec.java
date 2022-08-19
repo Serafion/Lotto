@@ -7,7 +7,10 @@ import pl.lotto.numberreceiver.repository.UserInputRepository;
 import pl.lotto.numberreceiver.uuidgenerator.UuidGenerable;
 import pl.lotto.numberreceiver.validator.ValidateMessage;
 
-import java.time.*;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -20,25 +23,25 @@ class NumberReceiverFacadeSpec {
     @Test
     @DisplayName("should accept numbers from user and return correct message when entered six numbers in range")
     public void should_return_correct_message() {
-        // given
+        //Given
         UuidGenerable uuidGenerator = new UuidGeneratorForTests();
         Clock clock = Clock.fixed(Instant.ofEpochMilli(1659772800000L), ZoneId.systemDefault());
         UserInputRepository storage = new UserInputRepositoryTest();
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildModuleForTests(uuidGenerator, storage, clock);
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 3, 4, 5, 6);
 
-        // when
+        //When
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
 
-        // then
-        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.CORRECT_MESSAGE, Optional.of(UUID.fromString("5fc155ba-078d-11ed-861d-0242ac120002")), numbersFromUser, Optional.of(LocalDateTime.ofInstant(Instant.ofEpochMilli(1659780000000L),clock.getZone())));
+        //Then
+        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.CORRECT_MESSAGE.toString(), Optional.of(UUID.fromString("5fc155ba-078d-11ed-861d-0242ac120002")), numbersFromUser, Optional.of(LocalDateTime.ofInstant(Instant.ofEpochMilli(1659780000000L), clock.getZone())));
         assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
     @DisplayName("Should return 3 sets of numbers")
     public void should_return_saved_numbers() {
-        // given
+        //Given
         UuidGenerable uuidGenerator = new UuidGeneratorForTests();
         Clock clock = Clock.fixed((LocalDateTime.of(2022,8,9,12,0,0).atZone(ZoneId.systemDefault()).toInstant()),ZoneId.systemDefault());
         UserInputRepository storage = new UserInputRepositoryTest();
@@ -51,70 +54,70 @@ class NumberReceiverFacadeSpec {
         numberReceiverFacade.inputNumbers(numbersFromUser3);
         LocalDateTime dateOfDraw = LocalDateTime.of(2022,8,13,12,0,0);
 
-        // when
+        //When
         List<NumberReceiverResultDto> result = numberReceiverFacade.retrieveNumbersForDate(dateOfDraw);
 
-        // then
+        //Then
         assertThat(result.size()).isEqualTo(3);
     }
 
     @Test
     @DisplayName("should return failed message due to less than six numbers message")
     public void should_return_failed_message_if_reveived_less_then_six_numbers() {
-        // given
+        //Given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 3, 4, 5);
 
-        // when
+        //When
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
 
-        // then
-        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.NOT_SIX_NUMBERS, Optional.empty(), numbersFromUser, Optional.empty());
+        //Then
+        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.NOT_SIX_NUMBERS.toString(), Optional.empty(), numbersFromUser, Optional.empty());
         assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
     @DisplayName("should return failed message if numbers from user exceed number range 1-99")
     public void should_return_failed_message_if_numbers_not_in_range() {
-        // given
+        //Given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 3, 4, 5, 121);
 
-        // when
+        //When
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
 
-        // then
-        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.NUMBERS_OUT_OF_RANGE, Optional.empty(), numbersFromUser, Optional.empty());
+        //Then
+        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.NUMBERS_OUT_OF_RANGE.toString(), Optional.empty(), numbersFromUser, Optional.empty());
         assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
     @DisplayName("should return failed message if provided with more then six numbers")
     public void should_return_failed_message_if_received_more_then_six_numbers() {
-        // given
+        //Given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
 
-        // when
+        //When
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
 
-        // then
-        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.NOT_SIX_NUMBERS, Optional.empty(), numbersFromUser, Optional.empty());
+        //Then
+        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.NOT_SIX_NUMBERS.toString(), Optional.empty(), numbersFromUser, Optional.empty());
         assertThat(result).isEqualTo(expectedResult);
     }
 
     @Test
     @DisplayName("should return failed message if provided with a list containing duplicates")
     public void should_return_failed_message_if_list_contains_duplicates() {
-        // given
+        //Given
         NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 2, 4, 5, 6, 7);
 
-        // when
+        //When
         NumberReceiverResultDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
 
-        // then
-        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.CONTAINS_DUPLICATES, Optional.empty(), numbersFromUser, Optional.empty());
+        //Then
+        NumberReceiverResultDto expectedResult = new NumberReceiverResultDto(ValidateMessage.CONTAINS_DUPLICATES.toString(), Optional.empty(), numbersFromUser, Optional.empty());
         assertThat(result).isEqualTo(expectedResult);
     }
 

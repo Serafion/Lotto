@@ -6,14 +6,15 @@ import java.util.*;
 
 public class ResultCalculator implements Calculatable {
 
+    public static final int MINIMUM_HIT_NUMBERS = 4;
     private List<NumberReceiverResultDto> inputs;
-    private List<Integer> winningNumbers;
+    private NumberReceiverResultDto winningNumbers;
 
     public ResultCalculator() {
     }
 
     @Override
-    public Map<UUID, WonNumbersCount> calculateResults(List<NumberReceiverResultDto> inputs, List<Integer> winningNumbers) {
+    public Map<UUID, WonNumbersCount> calculateResults(List<NumberReceiverResultDto> inputs, NumberReceiverResultDto winningNumbers) {
         this.inputs = inputs;
         this.winningNumbers = winningNumbers;
         return generateWinningContent();
@@ -29,24 +30,16 @@ public class ResultCalculator implements Calculatable {
 
     private void addContent(Map<UUID, WonNumbersCount> map, NumberReceiverResultDto dto) {
         UUID uuid = dto.uniqueLotteryId().get();
-        WonNumbersCount count = calculateWonNumbers(winningNumbers, dto.userNumbers());
-        map.put(uuid, count);
+        WonNumbersCount count = calculateWonNumbers(winningNumbers.userNumbers(), dto.userNumbers());
+        if (count.getValue() > MINIMUM_HIT_NUMBERS) {
+            map.put(uuid, count);
+        }
     }
 
     private WonNumbersCount calculateWonNumbers(List<Integer> input, List<Integer> wonNumbers) {
         int hitNumbers = calculateHitNumbers(input, wonNumbers);
         return fetchWonNumbersCount(hitNumbers);
 
-    }
-
-    private WonNumbersCount fetchWonNumbersCount(int hitNumbers) {
-        WonNumbersCount wonNumbersCount = WonNumbersCount.ZERO_NUMBERS_HIT;
-        for (WonNumbersCount numberOfHits : WonNumbersCount.values()) {
-            if (numberOfHits.getValue() == hitNumbers) {
-                wonNumbersCount = numberOfHits;
-            }
-        }
-        return wonNumbersCount;
     }
 
     private int calculateHitNumbers(List<Integer> input, List<Integer> drawnNumbers) {
@@ -58,6 +51,16 @@ public class ResultCalculator implements Calculatable {
             }
         }
         return hitNumbers;
+    }
+
+    private WonNumbersCount fetchWonNumbersCount(int hitNumbers) {
+        WonNumbersCount wonNumbersCount = WonNumbersCount.ZERO_NUMBERS_HIT;
+        for (WonNumbersCount numberOfHits : WonNumbersCount.values()) {
+            if (numberOfHits.getValue() == hitNumbers) {
+                wonNumbersCount = numberOfHits;
+            }
+        }
+        return wonNumbersCount;
     }
 
     private Set<Integer> convertToSet(List<Integer> drawnNumbers) {

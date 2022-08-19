@@ -15,10 +15,10 @@ public class DateGenerator implements Clockable {
 
     public LocalDateTime retrieveNextDrawDate() {
         LocalDateTime currentTime = clock.instant().atZone(clock.getZone()).toLocalDateTime();
-        return fetchDrawDateInEpochMili(currentTime);
+        return fetchDate(currentTime);
     }
 
-    private LocalDateTime fetchDrawDateInEpochMili(LocalDateTime currentTime) {
+    private LocalDateTime fetchDate(LocalDateTime currentTime) {
         LocalDateTime drawDay = retrieveDayOfDraw(currentTime.getDayOfMonth(), currentTime);
         while (!drawDay.getDayOfWeek().equals(DRAW_DAY_OF_WEEK) || (drawDay.compareTo(currentTime) < 0)) {
             drawDay = drawDay.plusDays(1);

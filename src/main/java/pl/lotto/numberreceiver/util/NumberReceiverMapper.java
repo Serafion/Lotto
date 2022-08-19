@@ -11,6 +11,6 @@ import java.util.UUID;
 public class NumberReceiverMapper {
 
     public static NumberReceiverResultDto toDto(ValidateMessage validationMessage, Optional<UUID> uuid, List<Integer> numbersFromUser, Optional<LocalDateTime> dateOfDraw) {
-        return new NumberReceiverResultDto(validationMessage, uuid, numbersFromUser, dateOfDraw);
+        return new NumberReceiverResultDto(validationMessage.toString(), uuid, numbersFromUser, dateOfDraw);
     }
 }

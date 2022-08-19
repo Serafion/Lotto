@@ -7,5 +7,5 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface Calculatable {
-    Map<UUID, WonNumbersCount> calculateResults(List<NumberReceiverResultDto> inputs, List<Integer> winningNumbers);
+    Map<UUID, WonNumbersCount> calculateResults(List<NumberReceiverResultDto> inputs, NumberReceiverResultDto winningNumbers);
 }

@@ -6,10 +6,14 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
-public interface Updatable {
-   boolean DataContainsTicket(UUID uuid);
+public interface InputService {
+   boolean uuidPresent(UUID uuid);
 
-   Map<UUID, WonNumbersCount> fetchResults();
+   Map<UUID, WonNumbersCount> fetchResults(UUID uuid);
 
    boolean serviceContainsDrawDate(LocalDateTime drawDate);
+
+   void addDate(LocalDateTime dateTime);
+
+   LocalDateTime getLastPasedDrawDate();
 }
