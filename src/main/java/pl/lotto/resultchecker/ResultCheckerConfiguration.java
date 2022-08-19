@@ -1,10 +1,9 @@
 package pl.lotto.resultchecker;
 
 import pl.lotto.numberreceiver.NumberReceiverFacade;
-import pl.lotto.resultchecker.dataretriever.DataImporter;
 import pl.lotto.resultchecker.repository.InputRepository;
+import pl.lotto.resultchecker.repository.InputService;
 import pl.lotto.resultchecker.repository.NumbersService;
-import pl.lotto.resultchecker.repository.Updatable;
 import pl.lotto.resultchecker.resultcalculator.Calculatable;
 import pl.lotto.resultchecker.resultcalculator.ResultCalculator;
 import pl.lotto.winningnumbergenerator.WiningNumbersGeneratorFacade;
@@ -20,10 +19,9 @@ public class ResultCheckerConfiguration {
 //    }
 
     public ResultCheckerFacade buildDefaultModuleForProduction(NumberReceiverFacade numberReceiverFacade, WiningNumbersGeneratorFacade winingNumbersGeneratorFacade, InputRepository repository, Clock clock) {
-        DataImporter importer = new DataImporter(winingNumbersGeneratorFacade, numberReceiverFacade, clock);
-        Updatable numbersService = new NumbersService(repository);
+        InputService numbersService = new NumbersService(repository, clock);
         Calculatable calculator = new ResultCalculator();
-        return new ResultCheckerFacade(numberReceiverFacade, winingNumbersGeneratorFacade, clock, numbersService, calculator, importer);
+        return new ResultCheckerFacade(numberReceiverFacade, winingNumbersGeneratorFacade, clock, numbersService, calculator);
     }
 
     public ResultCheckerFacade buildModuleForTest(NumberReceiverFacade numberReceiverFacade, WiningNumbersGeneratorFacade numbersGeneratorFacade, Clock clock, InputRepository inputRepository) {
