@@ -30,7 +30,7 @@ public class ResultCheckerFacade {
         this.calculator = calculator;
     }
 
-    Map<UUID, WonNumbersCount> checkWinners(UUID uuid) {
+    public Map<UUID, WonNumbersCount> checkWinners(UUID uuid) {
         updateNextDrawDate();
         LocalDateTime drawDate = inputService.getLastPasedDrawDate();
         if (inputService.uuidPresent(uuid)) {
@@ -45,9 +45,8 @@ public class ResultCheckerFacade {
         return new HashMap<>();
     }
 
-    private LocalDateTime updateNextDrawDate() {
+    private void updateNextDrawDate() {
         LocalDateTime drawDate = numberReceiverFacade.outputDrawTime();
         inputService.addDate(drawDate);
-        return drawDate;
     }
 }
