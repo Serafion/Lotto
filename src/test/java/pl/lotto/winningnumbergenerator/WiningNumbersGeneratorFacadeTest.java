@@ -1,41 +1,35 @@
 package pl.lotto.winningnumbergenerator;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import pl.lotto.MutableClock;
-import pl.lotto.numberreceiver.NumberReceiverFacade;
-import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.winningnumbergenerator.repository.WinningNumbersRepository;
-
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import pl.lotto.winningnumbergenerator.repository.WinningNumbersRepository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static pl.lotto.winningnumbergenerator.TestConstants.*;
+import static pl.lotto.numberreceiver.util.Constants.HOUR_OF_DRAW;
+import static pl.lotto.numberreceiver.util.Constants.MINUTE_OF_DRAW;
+import static pl.lotto.numberreceiver.util.Constants.SECOND_OF_DRAW;
 
 class WiningNumbersGeneratorFacadeTest {
-
-
-    private final WinningNumbersRepository repository = new NumberRepositoryForTest();
-    private final Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 14, 12, 0, 0).atZone(java.time.ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
-    private final NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
 
     @Test
     @DisplayName("should return six random numbers when valid date")
     void shouldReturnDrawNumbersWhenValidDate() {
-        //Given
-        WiningNumbersGeneratorFacade facade = new WiningNumberGeneratorConfiguration().buildModuleForTests(clock, repository, numberReceiverFacade);
-        LocalDateTime dateOfDraw = VALID_DATE_OF_DRAW_WHICH_WAS_DRAWN_EARLIER;
+        // given
+        WinningNumbersRepository repository = new NumberRepositoryForTest();
+        Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 14, 12, 0, 0).atZone(java.time.ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+
+        WiningNumbersGeneratorFacade facade = new WiningNumberGeneratorConfiguration().buildModuleForTests(clock, repository);
+        LocalDateTime dateOfDraw = LocalDateTime.of(2022, 8, 13, HOUR_OF_DRAW, MINUTE_OF_DRAW
+                , SECOND_OF_DRAW);
 
         //When
-        NumberReceiverResultDto numbersGenerated = facade.retrieveWonNumbersForDate(dateOfDraw);
+        List<Integer> numbersGenerated = facade.retrieveWonNumbersForDate(dateOfDraw);
 
         //Then
-        assertThat(numbersGenerated.userNumbers().size()).isEqualTo(6);
+        assertThat(numbersGenerated.size()).isEqualTo(6);
         assertThat(numbersGenerated).isEqualTo(repository.retrieveArchivalDraw(dateOfDraw));
     }
 
@@ -43,44 +37,54 @@ class WiningNumbersGeneratorFacadeTest {
     @DisplayName("Should return zero numbers when invalid date provided")
     void shouldReturnZeroDrawNumbersWhenInvalidDate() {
         //Given
-        WiningNumbersGeneratorFacade facade = new WiningNumberGeneratorConfiguration().buildModuleForTests(clock, repository, numberReceiverFacade);
+        WinningNumbersRepository repository = new NumberRepositoryForTest();
+        Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 9, 12, 0, 0).atZone(java.time.ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+        WiningNumbersGeneratorFacade facade = new WiningNumberGeneratorConfiguration().buildModuleForTests(clock, repository);
+
+        LocalDateTime dateOfDraw = LocalDateTime.of(2022, 8, 5, HOUR_OF_DRAW, MINUTE_OF_DRAW
+                , SECOND_OF_DRAW);
 
         //When
-        NumberReceiverResultDto numbersGenerated = facade.retrieveWonNumbersForDate(INVALID_DATE_OF_DRAW);
+        List<Integer> numbersGenerated = facade.retrieveWonNumbersForDate(dateOfDraw);
 
         //Then
-        assertThat(numbersGenerated.userNumbers().size()).isEqualTo(0);
+        assertThat(numbersGenerated.size()).isEqualTo(0);
     }
 
     @Test
     @DisplayName("Should return six random numbers when going day of draw and return after date of draw")
     void shouldPerformADrawIfDateWasOneDayBeforeDayOfDrawAndProvideNumbersAfterDrawDate() {
         //Given
-        //Clock.instant to mock
-        given(numberReceiverFacade.outputDrawTime()).willReturn(VALID_DATE_OF_DRAW_TO_BE_DRAWN);
-        MutableClock clock1 = new MutableClock(ZonedDateTime.of(INVALID_DATE_OF_DRAW, ZoneId.systemDefault()));
-        WiningNumbersGeneratorFacade facade = new WiningNumberGeneratorConfiguration().buildModuleForTests(clock1, repository, numberReceiverFacade);
+        WinningNumbersRepository repository = new NumberRepositoryForTest();
+        Clock clock = Clock.fixed(LocalDateTime.of(2022, 9, 9, 12, 0, 0).atZone(java.time.ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+        WiningNumbersGeneratorFacade facade = new WiningNumberGeneratorConfiguration().buildModuleForTests(clock, repository);
+
+
+        LocalDateTime dateOfDraw = LocalDateTime.of(2022, 9, 3, HOUR_OF_DRAW, MINUTE_OF_DRAW
+                , SECOND_OF_DRAW);
 
         //When
-        facade.retrieveWonNumbersForDate(VALID_DATE_OF_DRAW_TO_BE_DRAWN);
-        clock1.addDays(6);
-        NumberReceiverResultDto numbersGenerated = facade.retrieveWonNumbersForDate(VALID_DATE_OF_DRAW_TO_BE_DRAWN);
+        List<Integer> numbersGenerated = facade.retrieveWonNumbersForDate(dateOfDraw);
 
         //Then
-        assertThat(numbersGenerated.userNumbers().size()).isEqualTo(6);
+        assertThat(numbersGenerated.size()).isEqualTo(6);
     }
+
     @Test
     @DisplayName("Should return zero numbers when asked for draw numbers from future")
     void shouldReturnZeroDrawNumbersDateAfterCurrentDate() {
         //Given
-        given(numberReceiverFacade.outputDrawTime()).willReturn(VALID_DATE_OF_DRAW_TO_BE_DRAWN);
-        MutableClock clock1 = new MutableClock(ZonedDateTime.of(INVALID_DATE_OF_DRAW, ZoneId.systemDefault()));
-        WiningNumbersGeneratorFacade facade = new WiningNumberGeneratorConfiguration().buildModuleForTests(clock1, repository, numberReceiverFacade);
+        WinningNumbersRepository repository = new NumberRepositoryForTest();
+        Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 9, 12, 0, 0).atZone(java.time.ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+        WiningNumbersGeneratorFacade facade = new WiningNumberGeneratorConfiguration().buildModuleForTests(clock, repository);
+
+        LocalDateTime dateOfDraw = LocalDateTime.of(2022, 8, 13, HOUR_OF_DRAW, MINUTE_OF_DRAW
+                , SECOND_OF_DRAW);
 
         //When
-        NumberReceiverResultDto numbersGenerated = facade.retrieveWonNumbersForDate(VALID_DATE_OF_DRAW_TO_BE_DRAWN);
+        List<Integer> numbersGenerated = facade.retrieveWonNumbersForDate(dateOfDraw);
 
         //Then
-        assertThat(numbersGenerated.userNumbers().size()).isEqualTo(0);
+        assertThat(numbersGenerated.size()).isEqualTo(0);
     }
 }
