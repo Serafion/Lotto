@@ -1,5 +1,6 @@
 package pl.lotto.resultchecker;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 import pl.lotto.resultchecker.repository.InputRepository;
 import pl.lotto.resultchecker.repository.InputService;
@@ -18,10 +19,12 @@ public class ResultCheckerConfiguration {
 //        return buildModuleForProduction(numberReceiverFacade,winingNumbersGeneratorFacade);
 //    }
 
-    public ResultCheckerFacade buildDefaultModuleForProduction(NumberReceiverFacade numberReceiverFacade, WiningNumbersGeneratorFacade winingNumbersGeneratorFacade, InputRepository repository, Clock clock) {
+    public ResultCheckerFacade buildDefaultModuleForProduction(NumberReceiverFacade numberReceiverFacade,
+                                                               @Autowired WiningNumbersGeneratorFacade buildDefaultModule,
+                                                               InputRepository repository, Clock clock) {
         InputService numbersService = new NumbersService(repository, clock);
         Calculatable calculator = new ResultCalculator();
-        return new ResultCheckerFacade(numberReceiverFacade, winingNumbersGeneratorFacade, clock, numbersService, calculator);
+        return new ResultCheckerFacade(numberReceiverFacade, buildDefaultModule, clock, numbersService, calculator);
     }
 
     public ResultCheckerFacade buildModuleForTest(NumberReceiverFacade numberReceiverFacade, WiningNumbersGeneratorFacade numbersGeneratorFacade, Clock clock, InputRepository inputRepository) {
