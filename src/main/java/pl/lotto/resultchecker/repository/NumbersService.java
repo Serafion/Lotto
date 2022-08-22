@@ -19,7 +19,7 @@ public class NumbersService implements Updatable {
     }
 
     @Override
-    public boolean DataContainsTicket(UUID uuid) {
+    public boolean dataContainsTicket(UUID uuid) {
         return map.containsKey(uuid);
     }
 

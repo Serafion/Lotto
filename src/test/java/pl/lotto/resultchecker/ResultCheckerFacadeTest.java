@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(MockitoExtension.class)
-class ResultCheckerFacadeTest {
+class ResultCheckerFacadeTest implements SampleUserUuid {
 
     @Test
     @DisplayName("Should return lists of won numbers which contain hit 6 numbers")
@@ -34,19 +34,18 @@ class ResultCheckerFacadeTest {
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest());
         LocalDateTime dateTime = LocalDateTime.of(2022, 8, 13, 12, 0, 0);
-        UUID uuid = UUID.fromString("571fc5dd-b0ee-4557-90db-34c764273a8e");
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
         List<NumberReceiverResultDto> dtoList = List.of(NumberReceiverMapper.toDto(ValidateMessage.CORRECT_MESSAGE, Optional.of(UUID.fromString("571fc5dd-b0ee-4557-90db-34c764273a8e")), numbers, Optional.of(dateTime)));
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(dtoList);
         given(numbersGeneratorFacade.retrieveWonNumbersForDate(dateTime)).willReturn(numbers);
-        Map<UUID, WonNumbersCount> expected = new HashMap<>();
-        expected.put(uuid, WonNumbersCount.SIX_NUMBERS_HIT);
 
         //when
-        Map<UUID, WonNumbersCount> result = resultCheckerFacade.checkWinners(uuid);
-
+        Map<UUID, WonNumbersCount> result = resultCheckerFacade.checkWinners(sampleUserUuid());
 
         //then
+        Map<UUID, WonNumbersCount> expected = new HashMap<>();
+//        UUID uuid = UUID.fromString("571fc5dd-b0ee-4557-90db-34c764273a8e");
+        expected.put(sampleUserUuid(), WonNumbersCount.SIX_NUMBERS_HIT);
         assertThat(result).isEqualTo(expected);
     }
 

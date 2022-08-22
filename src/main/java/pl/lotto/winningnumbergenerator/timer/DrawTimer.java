@@ -1,6 +1,7 @@
 package pl.lotto.winningnumbergenerator.timer;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
@@ -14,7 +15,13 @@ public class DrawTimer implements TimeSettable {
     }
 
     @Override
-    public boolean ItsTimeToMakeADraw(LocalDateTime dateTime) {
+    public boolean itsTimeToMakeADraw(LocalDateTime dateTime) {
+
+
+
+        Clock offset = Clock.offset(Clock.fixed(Instant.from(LocalDateTime.of())), Duration.ofHours(1L));
+
+
         return isDrawDate(dateTime) && currentTime().isAfter(dateTime);
     }
 
@@ -24,6 +31,7 @@ public class DrawTimer implements TimeSettable {
 
     @Override
     public LocalDateTime currentTime() {
-        return Instant.from(clock.instant()).atZone(clock.getZone()).toLocalDateTime();
+        return Instant.now(clock).atZone(clock.getZone()).toLocalDateTime();
+//        return Instant.from(clock.instant()).atZone(clock.getZone()).toLocalDateTime();
     }
 }

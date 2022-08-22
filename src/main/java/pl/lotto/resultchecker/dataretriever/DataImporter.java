@@ -34,12 +34,7 @@ public class DataImporter implements Retrievable {
 
     @Override
     public LocalDateTime calculateLastDrawDate() {
-        LocalDateTime date = Instant.now(clock).atZone(clock.getZone()).toLocalDateTime();
-        LocalDateTime drawDate = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 12, 0, 0);
-        while (!drawDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
-            drawDate = drawDate.minusDays(1);
-        }
-        return drawDate;
+        return receiverFacade.outputDrawTime();
     }
 
 }

@@ -17,14 +17,12 @@ import java.util.UUID;
 
 public class ResultCheckerFacade {
 
-    Updatable inputRepository;
-    NumberReceiverFacade numberReceiverFacade;
-    WiningNumbersGeneratorFacade numbersGeneratorFacade;
-
-    Calculatable calculator;
-    Clock clock;
-
-    Retrievable importer;
+    private final Updatable inputRepository;
+    private final NumberReceiverFacade numberReceiverFacade;
+    private final WiningNumbersGeneratorFacade numbersGeneratorFacade;
+    private final Calculatable calculator;
+    private final Clock clock;
+    private final Retrievable importer;
 
     public ResultCheckerFacade(NumberReceiverFacade numberReceiverFacade, WiningNumbersGeneratorFacade numbersGeneratorFacade, Clock clock, Updatable inputRepository, Calculatable calculator, Retrievable importer) {
         this.numberReceiverFacade = numberReceiverFacade;
@@ -36,7 +34,7 @@ public class ResultCheckerFacade {
     }
 
     Map<UUID, WonNumbersCount> checkWinners(UUID uuid) {
-        if (inputRepository.DataContainsTicket(uuid)) {
+        if (inputRepository.dataContainsTicket(uuid)) {
             return inputRepository.fetchResults();
         }
         LocalDateTime drawDate = importer.calculateLastDrawDate();
@@ -48,6 +46,10 @@ public class ResultCheckerFacade {
         Map<UUID, WonNumbersCount> map = calculator.calculateResults(inputs, wonNumbers);
         return map.containsKey(uuid) ? map : new HashMap<>();
     }
+
+//    Map<UUID, WonNumbersCount> checkWinners(UUID uuid) {
+//        numberReceiverFacade.retrieveNumbersForDate()
+//    }
 
 
 }
