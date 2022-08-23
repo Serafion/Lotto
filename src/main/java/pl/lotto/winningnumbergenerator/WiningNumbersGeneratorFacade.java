@@ -1,41 +1,33 @@
 package pl.lotto.winningnumbergenerator;
 
-import pl.lotto.numberreceiver.NumberReceiverFacade;
-import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import pl.lotto.winningnumbergenerator.generator.Randomable;
 import pl.lotto.winningnumbergenerator.repository.WinningNumbersService;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import pl.lotto.winningnumbergenerator.timer.TimeSettable;
 
 public class WiningNumbersGeneratorFacade {
 
     WinningNumbersService winningNumbersService;
+    TimeSettable timer;
     Randomable generator;
-    NumberReceiverFacade numberReceiverFacade;
 
-    public WiningNumbersGeneratorFacade(WinningNumbersService numbersService, Randomable generator, NumberReceiverFacade numberReceiverFacade) {
+    public WiningNumbersGeneratorFacade(WinningNumbersService numbersService, TimeSettable timer, Randomable generator) {
         this.winningNumbersService = numbersService;
-        this.numberReceiverFacade = numberReceiverFacade;
+        this.timer = timer;
         this.generator = generator;
     }
 
-    public NumberReceiverResultDto retrieveWonNumbersForDate(LocalDateTime dateTime) {
-        winningNumbersService.saveNextDrawDate(numberReceiverFacade.outputDrawTime());
-        if (!winningNumbersService.containsWinningNumbers(dateTime) && winningNumbersService.isValidDrawDate(dateTime)) {
-            NumberReceiverResultDto resultDto = generator.generateNumbers(dateTime);
-            winningNumbersService.saveWinningNumbers(dateTime, resultDto.userNumbers());
+    public List<Integer> retrieveWonNumbersForDate(LocalDateTime dateTime) { // zwrócić Dto
+        if (!winningNumbersService.containsWinningNumbers(dateTime) && timer.itsTimeToMakeADraw(dateTime)) {
+            generator.generateNumbersToRepository(dateTime);
             return winningNumbersService.provideWinningNumbers(dateTime);
         }
-        if (winningNumbersService.containsWinningNumbers(dateTime)) {
+        if (winningNumbersService.containsWinningNumbers(dateTime) && timer.currentTime().isAfter(dateTime)) {
             return winningNumbersService.provideWinningNumbers(dateTime);
         }
-        return fetchErrorDto(dateTime);
-    }
-
-    private NumberReceiverResultDto fetchErrorDto(LocalDateTime dateTime) {
-        return new NumberReceiverResultDto("Invalid input provided, numbers not generated", Optional.empty(), List.of(), Optional.of(dateTime));
+        return Arrays.asList();
     }
 
 }

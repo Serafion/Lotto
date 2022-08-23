@@ -1,19 +1,15 @@
 package pl.lotto.resultchecker.repository;
 
-import pl.lotto.resultchecker.resultcalculator.WonNumbersCount;
-
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
+import pl.lotto.resultchecker.resultcalculator.WonNumbersCount;
 
-public interface InputService {
-   boolean uuidPresent(UUID uuid);
+public interface Updatable {
 
-   Map<UUID, WonNumbersCount> fetchResults(UUID uuid);
+    boolean dataContainsTicket(UUID uuid);
 
-   boolean serviceContainsDrawDate(LocalDateTime drawDate);
+    Map<UUID, WonNumbersCount> fetchResults();
 
-   void addDate(LocalDateTime dateTime);
-
-   LocalDateTime getLastPasedDrawDate();
+    boolean serviceContainsDrawDate(LocalDateTime drawDate);
 }
