@@ -2,8 +2,7 @@ package pl.lotto.resultchecker;
 
 import pl.lotto.MutableClock;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.numberreceiver.util.NumberReceiverMapper;
-import pl.lotto.numberreceiver.validator.ValidateMessage;
+import pl.lotto.winningnumbergenerator.winningnumbersdto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -29,14 +28,14 @@ public class Constants {
     List<Integer> numbers3 = Arrays.asList(8, 9, 10, 11, 12, 77);
     LocalDateTime dateOfDraw = LocalDateTime.of(2022, 8, 13, 12, 0, 0);
     LocalDateTime dateOfDrawAfterDraw = LocalDateTime.of(2022, 8, 13, 12, 0, 0);
-    NumberReceiverResultDto winningNumbers = new NumberReceiverResultDto("", Optional.empty(), numbers, Optional.of(dateOfDraw));
+    WinningNumbersDto winningNumbers = new WinningNumbersDto(numbers, dateOfDraw);
 
     public Constants() {
         List<NumberReceiverResultDto> dtoList = Arrays.asList(
-                NumberReceiverMapper.toDto(ValidateMessage.CORRECT_MESSAGE, Optional.of(uuid), numbers, Optional.of(dateOfDraw)),
-                NumberReceiverMapper.toDto(ValidateMessage.CORRECT_MESSAGE, Optional.of(uuid1), numbers1, Optional.of(dateOfDraw)),
-                NumberReceiverMapper.toDto(ValidateMessage.CORRECT_MESSAGE, Optional.of(uuid2), numbers2, Optional.of(dateOfDraw)),
-                NumberReceiverMapper.toDto(ValidateMessage.CORRECT_MESSAGE, Optional.of(uuid3), numbers3, Optional.of(dateOfDraw)));
+                new NumberReceiverResultDto("CORRECT_MESSAGE", Optional.of(uuid), numbers, Optional.of(dateOfDraw)),
+                new NumberReceiverResultDto("CORRECT_MESSAGE", Optional.of(uuid1), numbers1, Optional.of(dateOfDraw)),
+                new NumberReceiverResultDto("CORRECT_MESSAGE", Optional.of(uuid2), numbers2, Optional.of(dateOfDraw)),
+                new NumberReceiverResultDto("CORRECT_MESSAGE", Optional.of(uuid3), numbers3, Optional.of(dateOfDraw)));
 
         this.resultsList = dtoList;
     }

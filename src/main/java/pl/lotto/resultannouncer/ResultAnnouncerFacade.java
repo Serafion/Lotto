@@ -1,29 +1,38 @@
 package pl.lotto.resultannouncer;
 
-import pl.lotto.resultannouncer.messenger.Messenger;
 import pl.lotto.resultannouncer.repository.WinnerRepository;
-import pl.lotto.resultannouncer.repository.WinnerService;
 import pl.lotto.resultchecker.ResultCheckerFacade;
-import pl.lotto.resultchecker.resultcalculator.WonNumbersCount;
+import pl.lotto.resultchecker.checkerdto.CheckerDto;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
 public class ResultAnnouncerFacade {
+
     private final ResultCheckerFacade resultChecker;
     private final WinnerRepository winnerRepository;
-    private final WinnerService winnerService;
+    private UUID uuid;
+    private Map<UUID, Integer> wonTicketWithHitNumbers;
 
-    public ResultAnnouncerFacade(ResultCheckerFacade resultChecker, WinnerRepository winnerRepository, WinnerService winnerService) {
+    public ResultAnnouncerFacade(ResultCheckerFacade resultChecker, WinnerRepository winnerRepository) {
         this.resultChecker = resultChecker;
         this.winnerRepository = winnerRepository;
-        this.winnerService = winnerService;
     }
 
     public String checkWinner(UUID uuid) {
-        Map<UUID, WonNumbersCount> map = resultChecker.checkWinners(uuid);
-        winnerService.saveNewData(map);
-        WonNumbersCount wonNumbersCount = winnerService.checkTicketForWinningNumbers(uuid);
-        return Messenger.fetchMessage(wonNumbersCount);
+        this.uuid = uuid;
+        if (winnerRepository.containsWinningNumbers(uuid)) {
+            return Messenger.fetchMessage(winnerRepository.getDataFrom(uuid));
+        }
+        CheckerDto dto = resultChecker.checkWinners(uuid);
+        wonTicketWithHitNumbers = Mapper.mappingToMap(dto);
+        LocalDateTime drawDate = Mapper.mapDate(dto);
+        winnerRepository.saveNewDataToRepository(wonTicketWithHitNumbers, drawDate);
+        return Messenger.fetchMessage(checkTicketForWinningNumbers());
+    }
+
+    private Integer checkTicketForWinningNumbers() {
+        return wonTicketWithHitNumbers.containsKey(uuid) ? wonTicketWithHitNumbers.get(uuid) : Constants.NO_HIT_NUMBERS;
     }
 }

@@ -1,17 +1,14 @@
 package pl.lotto.winningnumbergenerator.repository;
 
-import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.winningnumbergenerator.winningnumbersdto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface WinningNumbersRepository {
-    NumberReceiverResultDto retrieveArchivalDraw(LocalDateTime dateTime);
+    WinningNumbersDto retrieveArchivalDraw(LocalDateTime dateTime);
 
-    NumberReceiverResultDto saveWinningNumbers(LocalDateTime dateTime, List<Integer> numbers);
+    WinningNumbersDto saveWinningNumbers(WinningNumbersDto winningNumbersDto);
 
     boolean containsWinningNumbers(LocalDateTime dateTime);
-
-    List<LocalDateTime> returnDrawDates();
 
 }

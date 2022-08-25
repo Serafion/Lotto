@@ -1,10 +1,13 @@
 package pl.lotto.resultchecker;
 
+import pl.lotto.resultchecker.checkerdto.CheckerDto;
 import pl.lotto.resultchecker.repository.InputRepository;
-import pl.lotto.resultchecker.resultcalculator.WonNumbersCount;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class InputRepositoryTest implements InputRepository {
     @Override
@@ -13,22 +16,32 @@ public class InputRepositoryTest implements InputRepository {
     }
 
     @Override
-    public Map<UUID, WonNumbersCount> retrieveAllData() {
-        return new HashMap<>();
+    public CheckerDto retrieveData(UUID uuid) {
+        return null;
+    }
+
+    @Override
+    public LocalDateTime drawDate(UUID uuid) {
+        return null;
+    }
+
+    @Override
+    public boolean containsWinningNumberForDrawDate(LocalDateTime drawDate) {
+        return false;
+    }
+
+    @Override
+    public void updateData(Map<UUID, Integer> data, LocalDateTime dateTime) {
+
+    }
+
+    @Override
+    public boolean dataContainsTicket(UUID uuid) {
+        return false;
     }
 
     @Override
     public void updateDrawDates(LocalDateTime drawDate) {
 
-    }
-
-    @Override
-    public void updateData(Map<UUID, WonNumbersCount> data) {
-
-    }
-
-    @Override
-    public Map<UUID, WonNumbersCount> retrieveData(UUID uuid) {
-        return null;
     }
 }

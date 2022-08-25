@@ -1,33 +1,35 @@
 package pl.lotto.winningnumbergenerator;
 
+import pl.lotto.winningnumbergenerator.repository.WinningNumbersRepository;
+import pl.lotto.winningnumbergenerator.winningnumbersdto.WinningNumbersDto;
+
+import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import pl.lotto.winningnumbergenerator.generator.Randomable;
-import pl.lotto.winningnumbergenerator.repository.WinningNumbersService;
-import pl.lotto.winningnumbergenerator.timer.TimeSettable;
 
 public class WiningNumbersGeneratorFacade {
 
-    WinningNumbersService winningNumbersService;
-    TimeSettable timer;
-    Randomable generator;
+    WinningNumbersRepository numRepo;
+    DrawTimer timer;
+    NumberGenerator generator;
+    Clock clock;
 
-    public WiningNumbersGeneratorFacade(WinningNumbersService numbersService, TimeSettable timer, Randomable generator) {
-        this.winningNumbersService = numbersService;
+    public WiningNumbersGeneratorFacade(WinningNumbersRepository numRepo, DrawTimer timer, NumberGenerator generator) {
+        this.numRepo = numRepo;
         this.timer = timer;
         this.generator = generator;
     }
 
-    public List<Integer> retrieveWonNumbersForDate(LocalDateTime dateTime) { // zwrócić Dto
-        if (!winningNumbersService.containsWinningNumbers(dateTime) && timer.itsTimeToMakeADraw(dateTime)) {
-            generator.generateNumbersToRepository(dateTime);
-            return winningNumbersService.provideWinningNumbers(dateTime);
+    public WinningNumbersDto retrieveWonNumbersForDate(LocalDateTime dateTime) {
+        if (!numRepo.containsWinningNumbers(dateTime) && timer.itsTimeToMakeADraw(dateTime)) {
+            WinningNumbersDto result = generator.generateNumbers(dateTime);
+            numRepo.saveWinningNumbers(result);
+            return result;
         }
-        if (winningNumbersService.containsWinningNumbers(dateTime) && timer.currentTime().isAfter(dateTime)) {
-            return winningNumbersService.provideWinningNumbers(dateTime);
+        if (numRepo.containsWinningNumbers(dateTime) && timer.currentTime().isAfter(dateTime)) {
+            return numRepo.retrieveArchivalDraw(dateTime);
         }
-        return Arrays.asList();
+        return WinningNumbersMapper.toDto(List.of(), dateTime);
     }
 
 }

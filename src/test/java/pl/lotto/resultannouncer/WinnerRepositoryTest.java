@@ -1,20 +1,24 @@
 package pl.lotto.resultannouncer;
 
 import pl.lotto.resultannouncer.repository.WinnerRepository;
-import pl.lotto.resultchecker.resultcalculator.WonNumbersCount;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
 public class WinnerRepositoryTest implements WinnerRepository {
     @Override
-    public Map<UUID, WonNumbersCount> getAllDataFromRepository() {
-        return new HashMap<>();
+    public Integer getDataFrom(UUID uuid) {
+        return null;
     }
 
     @Override
-    public void saveNewDataToRepository(Map<UUID, WonNumbersCount> wonNumbersCountMap) {
+    public boolean containsWinningNumbers(UUID uuid) {
+        return false;
+    }
+
+    @Override
+    public void saveNewDataToRepository(Map<UUID, Integer> wonNumbersCountMap, LocalDateTime dateTime) {
 
     }
 }
