@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 @ExtendWith(MockitoExtension.class)
 class ResultAnnouncerFacadeTest {
     private final WinnerRepositoryTest winnerRepository = new WinnerRepositoryTest();
-    private final Constants constants = new Constants();
+    private final ConstantsTest constants = new ConstantsTest();
     @InjectMocks
     private ResultCheckerFacade resultChecker = mock(ResultCheckerFacade.class);
 
@@ -23,7 +23,7 @@ class ResultAnnouncerFacadeTest {
     void should_return_that_user_hit_six_numbers() {
         //Given
         ResultAnnouncerFacade facade = new ResultAnnouncerConfiguration().buildModuleForProduction(resultChecker, winnerRepository);
-        given(resultChecker.checkWinners(constants.uuid)).willReturn(constants.expected);
+        given(resultChecker.checkWinners(constants.uuid)).willReturn(constants.checkerDto);
 
         //When
         String result = facade.checkWinner(constants.uuid);
@@ -37,7 +37,7 @@ class ResultAnnouncerFacadeTest {
     void should_return_that_user_hit_five_numbers() {
         //Given
         ResultAnnouncerFacade facade = new ResultAnnouncerConfiguration().buildModuleForProduction(resultChecker, winnerRepository);
-        given(resultChecker.checkWinners(constants.uuid1)).willReturn(constants.expected);
+        given(resultChecker.checkWinners(constants.uuid1)).willReturn(constants.checkerDto);
 
         //When
         String result = facade.checkWinner(constants.uuid1);
@@ -52,7 +52,7 @@ class ResultAnnouncerFacadeTest {
         //Given
         ResultCheckerFacade resultChecker = mock(ResultCheckerFacade.class);
         ResultAnnouncerFacade facade = new ResultAnnouncerConfiguration().buildModuleForProduction(resultChecker, winnerRepository);
-        given(resultChecker.checkWinners(constants.uuid2)).willReturn(constants.expected);
+        given(resultChecker.checkWinners(constants.uuid2)).willReturn(constants.checkerDto);
 
         //When
         String result = facade.checkWinner(constants.uuid2);

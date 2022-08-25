@@ -1,12 +1,13 @@
 package pl.lotto.resultannouncer.repository;
 
-import pl.lotto.resultchecker.resultcalculator.WonNumbersCount;
-
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
 public interface WinnerRepository {
-    Map<UUID, WonNumbersCount> getAllDataFromRepository();
+    Integer getDataFrom(UUID uuid);
 
-    void saveNewDataToRepository(Map<UUID, WonNumbersCount> wonNumbersCountMap);
+    boolean containsWinningNumbers(UUID uuid);
+
+    void saveNewDataToRepository(Map<UUID, Integer> wonNumbersCountMap, LocalDateTime dateTime);
 }

@@ -1,12 +1,10 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.repository.UserInput;
-import pl.lotto.numberreceiver.repository.UserInputRepository;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class UserInputRepositoryTest implements UserInputRepository {
 
@@ -16,13 +14,18 @@ public class UserInputRepositoryTest implements UserInputRepository {
     @Override
     public UserInput save(UserInput userInput) {
         validInputs.add(userInput);
-        records.put(userInput.drawDate(),validInputs);
-        return validInputs.get(validInputs.size()-1);
+        records.put(userInput.drawDate(), validInputs);
+        return validInputs.get(validInputs.size() - 1);
     }
 
     @Override
     public List<UserInput> findAllByDate(LocalDateTime date) {
         return records.get(date);
+    }
+
+    @Override
+    public LocalDateTime getDateOfDraw(UUID uuid) {
+        return null;
     }
 
 }

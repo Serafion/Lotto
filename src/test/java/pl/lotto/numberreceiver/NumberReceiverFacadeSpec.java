@@ -3,9 +3,6 @@ package pl.lotto.numberreceiver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.numberreceiver.repository.UserInputRepository;
-import pl.lotto.numberreceiver.uuidgenerator.UuidGenerable;
-import pl.lotto.numberreceiver.validator.ValidateMessage;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -65,7 +62,10 @@ class NumberReceiverFacadeSpec {
     @DisplayName("should return failed message due to less than six numbers message")
     public void should_return_failed_message_if_reveived_less_then_six_numbers() {
         //Given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
+        UuidGenerable uuidGenerator = new UuidGeneratorForTests();
+        Clock clock = Clock.fixed((LocalDateTime.of(2022, 8, 9, 12, 0, 0).atZone(ZoneId.systemDefault()).toInstant()), ZoneId.systemDefault());
+        UserInputRepository storage = new UserInputRepositoryTest();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildModuleForTests(uuidGenerator, storage, clock);
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 3, 4, 5);
 
         //When
@@ -80,7 +80,10 @@ class NumberReceiverFacadeSpec {
     @DisplayName("should return failed message if numbers from user exceed number range 1-99")
     public void should_return_failed_message_if_numbers_not_in_range() {
         //Given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
+        UuidGenerable uuidGenerator = new UuidGeneratorForTests();
+        Clock clock = Clock.fixed((LocalDateTime.of(2022, 8, 9, 12, 0, 0).atZone(ZoneId.systemDefault()).toInstant()), ZoneId.systemDefault());
+        UserInputRepository storage = new UserInputRepositoryTest();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildModuleForTests(uuidGenerator, storage, clock);
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 3, 4, 5, 121);
 
         //When
@@ -95,7 +98,10 @@ class NumberReceiverFacadeSpec {
     @DisplayName("should return failed message if provided with more then six numbers")
     public void should_return_failed_message_if_received_more_then_six_numbers() {
         //Given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
+        UuidGenerable uuidGenerator = new UuidGeneratorForTests();
+        Clock clock = Clock.fixed((LocalDateTime.of(2022, 8, 9, 12, 0, 0).atZone(ZoneId.systemDefault()).toInstant()), ZoneId.systemDefault());
+        UserInputRepository storage = new UserInputRepositoryTest();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildModuleForTests(uuidGenerator, storage, clock);
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
 
         //When
@@ -110,7 +116,10 @@ class NumberReceiverFacadeSpec {
     @DisplayName("should return failed message if provided with a list containing duplicates")
     public void should_return_failed_message_if_list_contains_duplicates() {
         //Given
-        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
+        UuidGenerable uuidGenerator = new UuidGeneratorForTests();
+        Clock clock = Clock.fixed((LocalDateTime.of(2022, 8, 9, 12, 0, 0).atZone(ZoneId.systemDefault()).toInstant()), ZoneId.systemDefault());
+        UserInputRepository storage = new UserInputRepositoryTest();
+        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildModuleForTests(uuidGenerator, storage, clock);
         List<Integer> numbersFromUser = Arrays.asList(1, 2, 2, 4, 5, 6, 7);
 
         //When
