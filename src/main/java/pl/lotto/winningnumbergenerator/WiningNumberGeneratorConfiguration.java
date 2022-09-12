@@ -10,11 +10,12 @@ import java.time.Clock;
 public class WiningNumberGeneratorConfiguration {
     // to be changed in production due to lack of WinningNumbersRepostory
 
-//    public WiningNumbersGeneratorFacade buildDefaultModuleForProduction(){
-//        return buildDefaultModule(Clock.systemDefaultZone(),new WinningNumbersRepositoryTemp(), new NumberReceiverConfiguration().buildDefaultModuleForProduction(), new NumberGenerator());
-//    }
-
     @Bean
+    public WiningNumbersGeneratorFacade winingNumbersGeneratorFacade(WinningNumbersRepository winningNumbersRepository) {
+        return buildDefaultModule(Clock.systemDefaultZone(), winningNumbersRepository);
+    }
+
+
     public WiningNumbersGeneratorFacade buildDefaultModule(Clock clock, WinningNumbersRepository repository) {
         DrawTimer timer = new DrawTimer(clock);
         NumberGenerator generator = new NumberGenerator();

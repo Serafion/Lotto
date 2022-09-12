@@ -1,14 +1,21 @@
 package pl.lotto.numberreceiver;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import java.time.Clock;
 
+@Configuration
 public class NumberReceiverConfiguration {
 
 
-//    public NumberReceiverFacade buildDefaultModuleForProduction() {
-//        Clock clock = Clock.systemDefaultZone();
-//        return buildModuleForProduction(new UuidGenerator(), new UserInputRepositoryTemp(), clock);
-//    }
+    //Test of making spring boot working
+    @Bean
+    public NumberReceiverFacade numberReceiverFacade(UserInputRepository userInputRepository) {
+        Clock clock = Clock.systemDefaultZone();
+        return buildModuleForProduction(new UuidGenerator(), userInputRepository, clock);
+    }
+
 
     public NumberReceiverFacade buildModuleForProduction(UuidGenerable generator, UserInputRepository storage, Clock clock) {
         Validator validator = new Validator();

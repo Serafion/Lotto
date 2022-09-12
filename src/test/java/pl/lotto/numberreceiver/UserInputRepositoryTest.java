@@ -14,7 +14,7 @@ public class UserInputRepositoryTest implements UserInputRepository {
     @Override
     public UserInput save(UserInput userInput) {
         validInputs.add(userInput);
-        records.put(userInput.drawDate(), validInputs);
+        records.put(userInput.date(), validInputs);
         return validInputs.get(validInputs.size() - 1);
     }
 
@@ -22,6 +22,7 @@ public class UserInputRepositoryTest implements UserInputRepository {
     public List<UserInput> findAllByDate(LocalDateTime date) {
         return records.get(date);
     }
+
 
     @Override
     public LocalDateTime getDateOfDraw(UUID uuid) {

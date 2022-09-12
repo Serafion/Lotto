@@ -11,6 +11,6 @@ class RecordMapper {
     }
 
     public static NumberReceiverResultDto toDto(UserInput input) {
-        return new NumberReceiverResultDto(input.message(), Optional.of(input.uniqueLotteryID()), input.numbersFromUser(), Optional.of(input.drawDate()));
+        return new NumberReceiverResultDto(input.message(), Optional.of(input.uniqueLotteryID()), input.numbersFromUser(), Optional.of(input.date()));
     }
 }
