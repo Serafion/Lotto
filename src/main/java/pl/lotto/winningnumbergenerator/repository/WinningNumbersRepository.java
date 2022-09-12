@@ -4,6 +4,7 @@ import pl.lotto.winningnumbergenerator.winningnumbersdto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
 
+
 public interface WinningNumbersRepository {
     WinningNumbersDto retrieveArchivalDraw(LocalDateTime dateTime);
 

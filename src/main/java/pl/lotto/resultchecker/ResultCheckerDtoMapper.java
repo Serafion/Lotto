@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+
 class ResultCheckerDtoMapper {
     static CheckerDto mapToCheckerDto(Map<UUID, Integer> map, LocalDateTime drawDate) {
         return new CheckerDto(map, drawDate);
