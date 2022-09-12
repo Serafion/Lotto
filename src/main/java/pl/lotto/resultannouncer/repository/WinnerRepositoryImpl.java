@@ -8,24 +8,24 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
-@Component
-public class WinnerRepositoryImpl implements WinnerRepository {
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
-    @Override
-    public Integer getDataFrom(UUID uuid) {
-        return null;
-    }
-
-    @Override
-    public boolean containsWinningNumbers(UUID uuid) {
-        return false;
-    }
-
-    @Override
-    public void saveNewDataToRepository(Map<UUID, Integer> wonNumbersCountMap, LocalDateTime dateTime) {
-
-    }
-}
+//@Component
+//public class WinnerRepositoryImpl implements WinnerRepository {
+//
+//    @Autowired
+//    private MongoTemplate mongoTemplate;
+//
+//    @Override
+//    public Integer getDataFrom(UUID uuid) {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean containsWinningNumbers(UUID uuid) {
+//        return false;
+//    }
+//
+//    @Override
+//    public void saveNewDataToRepository(Map<UUID, Integer> wonNumbersCountMap, LocalDateTime dateTime) {
+//
+//    }
+//}
