@@ -1,11 +1,11 @@
 package pl.lotto.numberreceiver;
 
-import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 
 class UserInputService implements InputService {
     private final UserInputRepository userInputRepository;
@@ -33,7 +33,9 @@ class UserInputService implements InputService {
 
     @Override
     public LocalDateTime provideDrawDate(UUID uuid) {
-        return userInputRepository.getDateOfDraw(uuid);
+        Optional<UserInput> byId = userInputRepository.findById(uuid);
+        UserInput userInput = byId.get();
+        return userInput.date();
     }
 }
 
