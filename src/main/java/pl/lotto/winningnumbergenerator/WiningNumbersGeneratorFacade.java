@@ -21,13 +21,13 @@ public class WiningNumbersGeneratorFacade {
     }
 
     public WinningNumbersDto retrieveWonNumbersForDate(LocalDateTime dateTime) {
-        if (!numRepo.containsWinningNumbers(dateTime) && timer.itsTimeToMakeADraw(dateTime)) {
+        if (!numRepo.existsById(dateTime) && timer.itsTimeToMakeADraw(dateTime)) {
             WinningNumbersDto result = generator.generateNumbers(dateTime);
-            numRepo.saveWinningNumbers(result);
+            numRepo.save(result);
             return result;
         }
-        if (numRepo.containsWinningNumbers(dateTime) && timer.currentTime().isAfter(dateTime)) {
-            return numRepo.retrieveArchivalDraw(dateTime);
+        if (numRepo.existsById(dateTime) && timer.currentTime().isAfter(dateTime)) {
+            return numRepo.findById(dateTime).get();
         }
         return WinningNumbersMapper.toDto(List.of(), dateTime);
     }

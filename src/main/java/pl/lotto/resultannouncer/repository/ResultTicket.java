@@ -15,6 +15,15 @@ public class ResultTicket {
 
     LocalDateTime date;
 
+    public ResultTicket() {
+    }
+
+    public ResultTicket(UUID uuid, Integer wonNumbers, LocalDateTime date) {
+        this.uuid = uuid;
+        this.wonNumbers = wonNumbers;
+        this.date = date;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

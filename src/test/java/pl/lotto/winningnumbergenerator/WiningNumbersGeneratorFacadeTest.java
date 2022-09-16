@@ -31,7 +31,7 @@ class WiningNumbersGeneratorFacadeTest {
 
         //Then
         assertThat(numbersGenerated.winningNumbers().size()).isEqualTo(6);
-        assertThat(numbersGenerated).isEqualTo(repository.retrieveArchivalDraw(dateOfDraw));
+        assertThat(numbersGenerated).isEqualTo(repository.findById(dateOfDraw).get());
     }
 
     @Test

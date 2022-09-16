@@ -23,6 +23,9 @@ class ResultCheckerDtoMapper {
         }
         return map;
     }
+//    static Map<UUID,Integer> checkerRepoToMap(List<UUID> uuidList, Integer){
+//
+//    }
 
     static List<Integer> mapWinningNumbersList(WinningNumbersDto dto) {
         return dto.winningNumbers();

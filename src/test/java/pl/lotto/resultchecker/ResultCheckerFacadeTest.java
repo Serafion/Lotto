@@ -57,7 +57,7 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
     void should_return_list_of_with_two_winning_numbers() {
         //Given
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
-        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest());
+        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest(), new DrawDateRepository());
         LocalDateTime dateTime = constants.dateOfDraw;
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
         given(numberReceiverFacade.outputDrawTime(constants.uuid)).willReturn(dateTime);
@@ -80,7 +80,7 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
     void should_empty_map_when_invalid_uuid() {
         //Given
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
-        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest());
+        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest(), new DrawDateRepository());
         LocalDateTime dateTime = constants.dateOfDraw;
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
         given(numberReceiverFacade.outputDrawTime(constants.uuid2)).willReturn(dateTime);
