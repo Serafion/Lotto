@@ -14,7 +14,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
         classes = LottoApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "application.environment=integration")
-//@ContextConfiguration(classes = TestClock.class)
+//@ContextConfiguration(classes = MutableClock.class)
 @Import(TestConfig.class)
 @Testcontainers
 public class BaseIntegrationTest {
@@ -30,8 +30,22 @@ public class BaseIntegrationTest {
     @Autowired
     public TestRestTemplate testRestTemplate;
 
+    @Autowired
+    public MutableClock clock;
+
+//    @Bean
+//    ZonedDateTime zonedDateTime(){
+//      return LocalDateTime.of(2022,02,12,10,11,00).atZone(ZoneId.systemDefault());
+//    }
+
     static {
         mongoDBContainer.start();
         System.setProperty("DB_PORT", String.valueOf(mongoDBContainer.getFirstMappedPort()));
     }
+
+//    @Bean
+//    @Primary
+//    public Clock mutableClock(){
+//        return new MutableClock(LocalDateTime.of(2022,02,12,10,11,00).atZone(ZoneId.systemDefault()));
+//    }
 }
