@@ -11,8 +11,8 @@ public class WiningNumberGeneratorConfiguration {
     // to be changed in production due to lack of WinningNumbersRepostory
 
     @Bean
-    public WiningNumbersGeneratorFacade winingNumbersGeneratorFacade(WinningNumbersRepository winningNumbersRepository) {
-        return buildDefaultModule(Clock.systemDefaultZone(), winningNumbersRepository);
+    public WiningNumbersGeneratorFacade winingNumbersGeneratorFacade(WinningNumbersRepository winningNumbersRepository, Clock clock) {
+        return buildDefaultModule(clock, winningNumbersRepository);
     }
 
 

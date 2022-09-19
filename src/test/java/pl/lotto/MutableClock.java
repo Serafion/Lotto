@@ -7,7 +7,7 @@ public class MutableClock extends Clock {
     public volatile ZonedDateTime today;
 
 
-    public Clock clock() {
+    public Clock clockMutable() {
         return new MutableClock(ZonedDateTime.of(LocalDateTime.of(2022, 02, 12, 10, 10), ZoneId.systemDefault()));
     }
 
@@ -32,5 +32,9 @@ public class MutableClock extends Clock {
 
     public synchronized void addDays(long days) {
         today = today.plusDays(days);
+    }
+
+    public synchronized void setToday(ZonedDateTime time) {
+        this.today = time;
     }
 }

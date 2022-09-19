@@ -1,6 +1,7 @@
 package pl.lotto.features;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import pl.lotto.winningnumbergenerator.repository.WinningNumbersRepository;
 import pl.lotto.winningnumbergenerator.winningnumbersdto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,6 +39,12 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     WinningNumbersRepository winningNumbersRepository;
+
+    @BeforeEach
+    void reset() {
+        //reset clock for tests
+        clock.setToday(LocalDateTime.of(2022, 02, 12, 10, 11, 00).atZone(ZoneId.systemDefault()));
+    }
 
     @Test
     public void sample_assertion() {
@@ -63,16 +71,20 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
                 .content(objectMapper.writeValueAsString(inputNumbersRequest))
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
+
         //When
         String stringResponse = mvcResult.getResponse().getContentAsString();
-        System.out.println(stringResponse + "WAS THE RESPONSE");
+        System.out.println(stringResponse + "WAS THE RESPONSE AT DATE" + LocalDateTime.now(clock));
         NumberReceiverResultDto result = objectMapper.readValue(stringResponse, NumberReceiverResultDto.class);
 
         //Then
-        assertThat(result.uniqueLotteryId()).isNotEmpty();
+        assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(result.uniqueLotteryId()).isPresent();
         assertThat(result.userNumbers()).isEqualTo(List.of(1, 2, 3, 4, 5, 6));
         assertThat(result.dateOfDraw().get()).isNotEqualTo(LocalDateTime.MIN);
         assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
+
+
     }
 
     @Test
@@ -86,21 +98,34 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         // When && Then
-        assertThat(mvcResult.getResponse().getStatus()).isEqualTo(422);
+        assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
 
     @Test
     @DisplayName("Should return won six numbers")
     public void should_return_won_6_numbers_if_valid_ticket_won() throws Exception {
         //Given
+        //Input numbers part
         InputNumbersRequest inputNumbersRequest = new InputNumbersRequest();
-        inputNumbersRequest.setNumbers("1,2,3,4,5,6");
+        inputNumbersRequest.setNumbers("1,12,23,34,45,66");
         MvcResult inputNumbersRequestMvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/process")
                 .content(objectMapper.writeValueAsString(inputNumbersRequest))
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        //When
         String stringResponse = inputNumbersRequestMvcResult.getResponse().getContentAsString();
         NumberReceiverResultDto result = objectMapper.readValue(stringResponse, NumberReceiverResultDto.class);
+
+        //Then
+        assertThat(inputNumbersRequestMvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
+        assertThat(result.userNumbers()).isEqualTo(List.of(1, 12, 23, 34, 45, 66));
+        assertThat(result.uniqueLotteryId().isPresent()).isTrue();
+        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 02, 12, 12, 00, 00).toString());
+
+        //Given
         winningNumbersRepository.save(new WinningNumbersDto(result.userNumbers(), result.dateOfDraw().get()));
+        clock.addDays(7);
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")
@@ -112,6 +137,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         String result_response = resultAnnouncerResult.getResponse().getContentAsString();
 
         //Then
+        assertThat(resultAnnouncerResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(result_response).isEqualTo("You've hit: 6 numbers");
     }
 
@@ -124,9 +150,21 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         MvcResult inputNumbersRequestMvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/process")
                 .content(objectMapper.writeValueAsString(inputNumbersRequest))
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        //When
         String stringResponse = inputNumbersRequestMvcResult.getResponse().getContentAsString();
         NumberReceiverResultDto result = objectMapper.readValue(stringResponse, NumberReceiverResultDto.class);
+
+        //Then
+        assertThat(inputNumbersRequestMvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
+        assertThat(result.userNumbers()).isEqualTo(List.of(1, 2, 3, 4, 5, 99));
+        assertThat(result.uniqueLotteryId().isPresent()).isTrue();
+        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 02, 12, 12, 00, 00).toString());
+
+        //Given
         winningNumbersRepository.save(new WinningNumbersDto(List.of(1, 2, 3, 4, 5, 6), result.dateOfDraw().get()));
+        clock.addDays(7);
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")
@@ -138,6 +176,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         String result_response = resultAnnouncerResult.getResponse().getContentAsString();
 
         //Then
+        assertThat(resultAnnouncerResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(result_response).isEqualTo("You've hit: 5 numbers");
     }
 
@@ -150,9 +189,22 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         MvcResult inputNumbersRequestMvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/process")
                 .content(objectMapper.writeValueAsString(inputNumbersRequest))
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        //When
         String stringResponse = inputNumbersRequestMvcResult.getResponse().getContentAsString();
         NumberReceiverResultDto result = objectMapper.readValue(stringResponse, NumberReceiverResultDto.class);
+
+        //Then
+        assertThat(inputNumbersRequestMvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
+        assertThat(result.userNumbers()).isEqualTo(List.of(1, 2, 96, 97, 98, 99));
+        assertThat(result.uniqueLotteryId().isPresent()).isTrue();
+        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 02, 12, 12, 00, 00).toString());
+
+
+        //Given
         winningNumbersRepository.save(new WinningNumbersDto(List.of(1, 2, 3, 4, 5, 6), result.dateOfDraw().get()));
+        clock.addDays(7);
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")
@@ -164,6 +216,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         String result_response = resultAnnouncerResult.getResponse().getContentAsString();
 
         //Then
+        assertThat(resultAnnouncerResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(result_response).isEqualTo("sorry it's a loosing game");
     }
 
@@ -182,7 +235,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         MockHttpServletResponse response = resultAnnouncerResult.getResponse();
 
         //Then
-        assertThat(response.getStatus()).isEqualTo(400);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).isEqualTo("Invalid UUID data provided");
     }
 }
