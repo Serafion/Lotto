@@ -11,8 +11,8 @@ public class NumberReceiverConfiguration {
 
     //Test of making spring boot working
     @Bean
-    public NumberReceiverFacade numberReceiverFacade(UserInputRepository userInputRepository) {
-        Clock clock = Clock.systemDefaultZone();
+    public NumberReceiverFacade numberReceiverFacade(UserInputRepository userInputRepository, Clock clock) {
+//        Clock clock = Clock.systemDefaultZone();
         return buildModuleForProduction(new UuidGenerator(), userInputRepository, clock);
     }
 
