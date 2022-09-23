@@ -14,7 +14,8 @@ class DateGenerator {
     }
 
     public LocalDateTime retrieveNextDrawDate() {
-        LocalDateTime currentTime = clock.instant().atZone(clock.getZone()).toLocalDateTime();
+        LocalDateTime currentTime = LocalDateTime.now(clock);
+//                clock.instant().atZone(clock.getZone()).toLocalDateTime();
         return fetchDate(currentTime);
     }
 
