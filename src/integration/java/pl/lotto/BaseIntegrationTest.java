@@ -1,5 +1,8 @@
 package pl.lotto;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -32,6 +35,12 @@ public class BaseIntegrationTest {
 
     @Autowired
     public MutableClock clock;
+
+    @BeforeEach
+    void reset() {
+        //reset clock for tests
+        clock.setToday(LocalDateTime.of(2022, 02, 12, 10, 11, 00).atZone(ZoneId.systemDefault()));
+    }
 
 //    @Bean
 //    ZonedDateTime zonedDateTime(){
