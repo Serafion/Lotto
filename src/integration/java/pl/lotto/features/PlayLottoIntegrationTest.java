@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @AutoConfigureMockMvc
+@ActiveProfiles("integration")
 public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
 
@@ -39,12 +41,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     WinningNumbersRepository winningNumbersRepository;
-
-    @BeforeEach
-    void reset() {
-        //reset clock for tests
-        clock.setToday(LocalDateTime.of(2022, 02, 12, 10, 11, 00).atZone(ZoneId.systemDefault()));
-    }
 
     @Test
     public void sample_assertion() {
@@ -70,6 +66,8 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/process")
                 .content(objectMapper.writeValueAsString(inputNumbersRequest))
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+//        clock.setToday();
 
 
         //When

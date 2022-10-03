@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 
 @Document
-record UserInput(
+public record UserInput(
         String message,
         List<Integer> numbersFromUser,
         @MongoId UUID uniqueLotteryID,
