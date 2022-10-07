@@ -1,6 +1,5 @@
 package pl.lotto.numberreceiver;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,7 @@ class DuplicateChecker implements Conditionable {
     }
 
     private static int countNumbersFromUser(List<Integer> list) {
-        return Arrays.stream(list.toArray())
+        return list.stream()
                 .collect(Collectors.toSet())
                 .size();
     }

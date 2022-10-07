@@ -8,14 +8,13 @@ import org.springframework.data.repository.query.FluentQuery;
 import pl.lotto.resultannouncer.repository.ResultTicket;
 import pl.lotto.resultannouncer.repository.WinnerRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 public class WinnerRepositoryTest implements WinnerRepository {
 
 
+    Map<UUID, ResultTicket> map = new HashMap<>();
     @Override
     public <S extends ResultTicket> List<S> saveAll(Iterable<S> entities) {
         return null;
@@ -58,17 +57,18 @@ public class WinnerRepositoryTest implements WinnerRepository {
 
     @Override
     public <S extends ResultTicket> S save(S entity) {
-        return null;
+        map.put(entity.getUuid(), new ResultTicket(entity.getUuid(), entity.getWonNumbers(), entity.getDate()));
+        return (S) new ResultTicket(entity.getUuid(), entity.getWonNumbers(), entity.getDate());
     }
 
     @Override
     public Optional<ResultTicket> findById(UUID uuid) {
-        return Optional.empty();
+        return Optional.of(map.get(uuid));
     }
 
     @Override
     public boolean existsById(UUID uuid) {
-        return false;
+        return map.containsKey(uuid);
     }
 
     @Override

@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,10 +58,10 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
     void should_return_list_of_with_two_winning_numbers() {
         //Given
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
-        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest(), new DrawDateRepository());
+        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest());
         LocalDateTime dateTime = constants.dateOfDraw;
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
-        given(numberReceiverFacade.outputDrawTime(constants.uuid)).willReturn(dateTime);
+        given(numberReceiverFacade.outputDrawTime(constants.uuid)).willReturn(Optional.of(dateTime));
         given(numbersGeneratorFacade.retrieveWonNumbersForDate(dateTime)).willReturn(constants.winningNumbers);
 
 
@@ -80,10 +81,10 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
     void should_empty_map_when_invalid_uuid() {
         //Given
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
-        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest(), new DrawDateRepository());
+        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest());
         LocalDateTime dateTime = constants.dateOfDraw;
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
-        given(numberReceiverFacade.outputDrawTime(constants.uuid2)).willReturn(dateTime);
+        given(numberReceiverFacade.outputDrawTime(constants.uuid2)).willReturn(Optional.of(dateTime));
         given(numbersGeneratorFacade.retrieveWonNumbersForDate(dateTime)).willReturn(constants.winningNumbers);
 
 

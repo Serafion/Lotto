@@ -3,6 +3,7 @@ package pl.lotto.numberreceiver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.repository.UserInputRepository;
 
 import java.time.Clock;
 import java.time.Instant;

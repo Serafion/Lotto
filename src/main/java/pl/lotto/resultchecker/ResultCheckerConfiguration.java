@@ -3,7 +3,6 @@ package pl.lotto.resultchecker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
-import pl.lotto.resultchecker.repository.DrawDateRepository;
 import pl.lotto.resultchecker.repository.ResultCheckerRepository;
 import pl.lotto.winningnumbergenerator.WiningNumbersGeneratorFacade;
 
@@ -22,12 +21,12 @@ public class ResultCheckerConfiguration {
     @Bean
     public ResultCheckerFacade resultCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                                    WiningNumbersGeneratorFacade winingNumbersGeneratorFacade,
-                                                   ResultCheckerRepository resultCheckerRepository, Clock clock, ResultCalculator calculator, DrawDateRepository drawDateRepository) {
-        return new ResultCheckerFacade(drawDateRepository, numberReceiverFacade, winingNumbersGeneratorFacade, clock, resultCheckerRepository, calculator);
+                                                   ResultCheckerRepository resultCheckerRepository, Clock clock, ResultCalculator calculator) {
+        return new ResultCheckerFacade(numberReceiverFacade, winingNumbersGeneratorFacade, clock, resultCheckerRepository, calculator);
     }
 
-    public ResultCheckerFacade buildModuleForTest(NumberReceiverFacade numberReceiverFacade, WiningNumbersGeneratorFacade numbersGeneratorFacade, Clock clock, ResultCheckerRepository inputRepository, DrawDateRepository drawDateRepository) {
+    public ResultCheckerFacade buildModuleForTest(NumberReceiverFacade numberReceiverFacade, WiningNumbersGeneratorFacade numbersGeneratorFacade, Clock clock, ResultCheckerRepository inputRepository) {
         ResultCalculator calculator = new ResultCalculator();
-        return resultCheckerFacade(numberReceiverFacade, numbersGeneratorFacade, inputRepository, clock, calculator, drawDateRepository);
+        return resultCheckerFacade(numberReceiverFacade, numbersGeneratorFacade, inputRepository, clock, calculator);
     }
 }
