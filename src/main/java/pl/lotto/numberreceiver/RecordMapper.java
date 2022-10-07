@@ -1,6 +1,7 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.repository.UserInput;
 
 import java.time.LocalDateTime;
 import java.util.List;

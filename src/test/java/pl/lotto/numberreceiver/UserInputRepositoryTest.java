@@ -1,17 +1,16 @@
 package pl.lotto.numberreceiver;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Function;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
+import pl.lotto.numberreceiver.repository.UserInput;
+import pl.lotto.numberreceiver.repository.UserInputRepository;
+
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.Function;
 
 public class UserInputRepositoryTest implements UserInputRepository {
 
@@ -29,6 +28,11 @@ public class UserInputRepositoryTest implements UserInputRepository {
     @Override
     public List<UserInput> findAllByDate(LocalDateTime date) {
         return records.get(date);
+    }
+
+    @Override
+    public boolean existsByDate(LocalDateTime dateTime) {
+        return records.containsKey(dateTime);
     }
 
     @Override

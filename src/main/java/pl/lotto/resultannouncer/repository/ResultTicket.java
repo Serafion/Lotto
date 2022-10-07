@@ -36,10 +36,6 @@ public class ResultTicket {
         return wonNumbers;
     }
 
-    public void setWonNumbers(Integer wonNumbers) {
-        this.wonNumbers = wonNumbers;
-    }
-
     public LocalDateTime getDate() {
         return date;
     }

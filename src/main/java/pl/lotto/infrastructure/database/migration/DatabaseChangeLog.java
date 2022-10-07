@@ -2,12 +2,13 @@ package pl.lotto.infrastructure.database.migration;//package pl.lotto.infrastruc
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
+import org.springframework.context.annotation.Profile;
+import pl.lotto.numberreceiver.repository.UserInput;
+import pl.lotto.numberreceiver.repository.UserInputRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.context.annotation.Profile;
-import pl.lotto.numberreceiver.UserInput;
-import pl.lotto.numberreceiver.UserInputRepository;
 
 @ChangeLog(order = "1")
 public class DatabaseChangeLog {

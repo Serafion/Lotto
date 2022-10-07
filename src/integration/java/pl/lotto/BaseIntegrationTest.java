@@ -1,7 +1,5 @@
 package pl.lotto;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +10,10 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import pl.lotto.winningnumbergenerator.repository.WinningNumbersRepository;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @SpringBootTest(
         classes = LottoApplication.class,
@@ -22,6 +24,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public class BaseIntegrationTest {
 
+    @Autowired
+    public WinningNumbersRepository winningNumbersRepository;
     @Container
     static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2");
 
@@ -40,6 +44,8 @@ public class BaseIntegrationTest {
     void reset() {
         //reset clock for tests
         clock.setToday(LocalDateTime.of(2022, 02, 12, 10, 11, 00).atZone(ZoneId.systemDefault()));
+        //reset repository
+        winningNumbersRepository.deleteAll();
     }
 
 //    @Bean

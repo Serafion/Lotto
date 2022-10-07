@@ -1,7 +1,6 @@
 package pl.lotto.features;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,9 @@ import pl.lotto.BaseIntegrationTest;
 import pl.lotto.infrastructure.numberannouncer.endpoint.ResultRequest;
 import pl.lotto.infrastructure.numberreceiver.endpoint.InputNumbersRequest;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.winningnumbergenerator.repository.WinningNumbersRepository;
 import pl.lotto.winningnumbergenerator.winningnumbersdto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,9 +35,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
-
-    @Autowired
-    WinningNumbersRepository winningNumbersRepository;
 
     @Test
     public void sample_assertion() {
@@ -81,8 +75,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         assertThat(result.userNumbers()).isEqualTo(List.of(1, 2, 3, 4, 5, 6));
         assertThat(result.dateOfDraw().get()).isNotEqualTo(LocalDateTime.MIN);
         assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
-
-
     }
 
     @Test
@@ -123,6 +115,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
         //Given
         winningNumbersRepository.save(new WinningNumbersDto(result.userNumbers(), result.dateOfDraw().get()));
+        System.out.println(winningNumbersRepository.findById(result.dateOfDraw().get()));
         clock.addDays(7);
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
