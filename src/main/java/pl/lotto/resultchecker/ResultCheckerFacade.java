@@ -33,11 +33,14 @@ public class ResultCheckerFacade {
     }
 
     public CheckerDto checkWinners(UUID uuid) {
+        //All wrong and prone to null draw date, change needed in number receiver
         LocalDateTime drawDate = numberReceiverFacade.outputDrawTime(uuid);
-
-        if (drawDateRepository.existsById(uuid)) {
-            return resultCheckerRepository.findById(drawDateRepository.findById(uuid).get().dateTime()).get();
+        if (resultCheckerRepository.existsById(drawDate)) {
+            return resultCheckerRepository.findById(drawDate).get();
         }
+//        if (drawDateRepository.existsById(uuid)) {
+//            return resultCheckerRepository.findById(drawDateRepository.findById(uuid).get().dateTime()).get();
+//        }
         drawDateRepository.save(new CheckerRepoEntity(uuid, drawDate));
         Map<UUID, List<Integer>> inputs = fetchInputMap(drawDate);
         List<Integer> wonNumbers = fetchWonNumbers(drawDate);

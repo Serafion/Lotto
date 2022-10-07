@@ -20,7 +20,8 @@ public class ResultAnnouncerController {
     @RequestMapping(value = "/get_results", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<String> getResults(@RequestBody ResultRequest resultRequest) {
         Optional<UUID> uuid = getUUID(resultRequest.getUuid());
-        return uuid.map(value -> ResponseEntity.ok(resultAnnouncerFacade.checkWinner(value))).orElseGet(() -> ResponseEntity.status(400).body("Invalid UUID data provided"));
+        return uuid.map(value -> ResponseEntity.ok(resultAnnouncerFacade.checkWinner(value)))
+                .orElseGet(() -> ResponseEntity.status(400).body("Invalid UUID data provided"));
     }
 
     private Optional<UUID> getUUID(String input) {

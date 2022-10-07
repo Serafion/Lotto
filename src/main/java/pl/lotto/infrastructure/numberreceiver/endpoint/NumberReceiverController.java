@@ -1,5 +1,6 @@
 package pl.lotto.infrastructure.numberreceiver.endpoint;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @RestController
 public class NumberReceiverController {
 
@@ -35,6 +37,7 @@ public class NumberReceiverController {
         if (numbers.isPresent()) {
             NumberReceiverResultDto ticket = numberReceiverFacade.inputNumbers(numbers.get());
             if (ticket.uniqueLotteryId().isPresent()) {
+                log.info("Ticket for date: " + ticket.dateOfDraw().get() + " and with uuid" + ticket.uniqueLotteryId());
                 return ResponseEntity.ok().body(ticket);
             }
         }
