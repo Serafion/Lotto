@@ -14,7 +14,7 @@ public class ResultAnnouncerFacade {
     private final ResultCheckerFacade resultChecker;
     private final WinnerRepository winnerRepository;
     private UUID uuid;
-    private Map<UUID, Integer> wonTicketWithHitNumbers;
+    private Map<UUID, Integer> wonTicketWithHitNumbers; // map is not needed as there is a repository
 
     public ResultAnnouncerFacade(ResultCheckerFacade resultChecker, WinnerRepository winnerRepository) {
         this.resultChecker = resultChecker;
