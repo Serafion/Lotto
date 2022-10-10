@@ -1,6 +1,7 @@
 package pl.lotto.features;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,13 @@ import pl.lotto.BaseIntegrationTest;
 import pl.lotto.infrastructure.numberannouncer.endpoint.ResultRequest;
 import pl.lotto.infrastructure.numberreceiver.endpoint.InputNumbersRequest;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.winningnumbergenerator.winningnumbersdto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -97,7 +100,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         //Given
         //Input numbers part
         InputNumbersRequest inputNumbersRequest = new InputNumbersRequest();
-        inputNumbersRequest.setNumbers("1,12,23,34,45,66");
+        inputNumbersRequest.setNumbers("1,2,3,4,5,6");
         MvcResult inputNumbersRequestMvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/process")
                 .content(objectMapper.writeValueAsString(inputNumbersRequest))
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
@@ -109,14 +112,18 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         //Then
         assertThat(inputNumbersRequestMvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
-        assertThat(result.userNumbers()).isEqualTo(List.of(1, 12, 23, 34, 45, 66));
+        assertThat(result.userNumbers()).isEqualTo(List.of(1, 2, 3, 4, 5, 6));
         assertThat(result.uniqueLotteryId().isPresent()).isTrue();
         assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 02, 12, 12, 00, 00).toString());
 
         //Given
-        winningNumbersRepository.save(new WinningNumbersDto(result.userNumbers(), result.dateOfDraw().get()));
-        System.out.println(winningNumbersRepository.findById(result.dateOfDraw().get()));
         clock.addDays(7);
+        StringValuePattern pswd = equalTo("abc");
+        StringValuePattern date = equalTo("2022-02-12");
+        Map<String, StringValuePattern> map = new HashMap<>();
+        map.put(pswd.getName(), pswd);
+        map.put(date.getName(), date);
+//        stubFor(WireMock.get("http://localhost:1443/get_numbers").withQueryParams(map).willReturn(aResponse().withStatus(200).withHeader("Content-Type",MediaType.APPLICATION_JSON_VALUE).withBody("{[1,2,3,4,5,6]}")));
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")
@@ -154,8 +161,15 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 02, 12, 12, 00, 00).toString());
 
         //Given
-        winningNumbersRepository.save(new WinningNumbersDto(List.of(1, 2, 3, 4, 5, 6), result.dateOfDraw().get()));
         clock.addDays(7);
+//        StringValuePattern pswd = equalTo("abc");
+//        StringValuePattern date = equalTo("2022-02-12");
+//        Map<String,StringValuePattern> map = new HashMap<>();
+//        map.put(pswd.getName(),pswd);
+//        map.put(date.getName(),date);
+//        configureFor("http://numbergetter.pl",0);
+//        stubFor(get("/get_numbers").withQueryParams(map).willReturn(aResponse().withStatus(200).withBody("{[1,2,3,4,5,6]}")));
+//////        ?pswd=abc&date=2022-02-12
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")
@@ -165,6 +179,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
         //When
         String result_response = resultAnnouncerResult.getResponse().getContentAsString();
+
 
         //Then
         assertThat(resultAnnouncerResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
@@ -194,8 +209,9 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
 
         //Given
-        winningNumbersRepository.save(new WinningNumbersDto(List.of(1, 2, 3, 4, 5, 6), result.dateOfDraw().get()));
         clock.addDays(7);
+//        configureFor("localhost",1443);
+//        stubFor(get("/get_numbers?pswd=abc&date=2022-02-12")).setResponse(aResponse().withStatus(200).withResponseBody(Body.ofBinaryOrText(objectMapper.writeValueAsBytes(List.of(1,2,3,4,5,6)), ContentTypeHeader.absent())).build());
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")

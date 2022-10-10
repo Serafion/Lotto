@@ -2,11 +2,9 @@ package pl.lotto.resultchecker;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.lotto.numberprovider.NumberProviderFacade;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 import pl.lotto.resultchecker.repository.ResultCheckerRepository;
-import pl.lotto.winningnumbergenerator.WiningNumbersGeneratorFacade;
-
-import java.time.Clock;
 
 @Configuration
 public class ResultCheckerConfiguration {
@@ -20,13 +18,14 @@ public class ResultCheckerConfiguration {
 
     @Bean
     public ResultCheckerFacade resultCheckerFacade(NumberReceiverFacade numberReceiverFacade,
-                                                   WiningNumbersGeneratorFacade winingNumbersGeneratorFacade,
-                                                   ResultCheckerRepository resultCheckerRepository, Clock clock, ResultCalculator calculator) {
-        return new ResultCheckerFacade(numberReceiverFacade, winingNumbersGeneratorFacade, clock, resultCheckerRepository, calculator);
+                                                   ResultCheckerRepository resultCheckerRepository,
+                                                   ResultCalculator calculator,
+                                                   NumberProviderFacade numberProviderFacade) {
+        return new ResultCheckerFacade(numberReceiverFacade, resultCheckerRepository, calculator, numberProviderFacade);
     }
 
-    public ResultCheckerFacade buildModuleForTest(NumberReceiverFacade numberReceiverFacade, WiningNumbersGeneratorFacade numbersGeneratorFacade, Clock clock, ResultCheckerRepository inputRepository) {
+    public ResultCheckerFacade buildModuleForTest(NumberReceiverFacade numberReceiverFacade, ResultCheckerRepository inputRepository, NumberProviderFacade numberProviderFacade) {
         ResultCalculator calculator = new ResultCalculator();
-        return resultCheckerFacade(numberReceiverFacade, numbersGeneratorFacade, inputRepository, clock, calculator);
+        return resultCheckerFacade(numberReceiverFacade, inputRepository, calculator, numberProviderFacade);
     }
 }

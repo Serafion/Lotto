@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static pl.lotto.resultannouncer.Constants.INVALID_TICKET_PROVIDED;
+import static pl.lotto.resultannouncer.Constants.NO_HIT_NUMBERS;
 
 public class ResultAnnouncerFacade {
 
@@ -27,8 +28,12 @@ public class ResultAnnouncerFacade {
                     winnerRepository.findById(uuid).get().getWonNumbers());
         }
         CheckerDto dto = resultChecker.checkWinners(uuid);
-        if (Mapper.mapDate(dto).equals(LocalDateTime.MIN)) {
+        LocalDateTime returnedDate = Mapper.mapDate(dto);
+        if (returnedDate.equals(LocalDateTime.MIN)) {
             return INVALID_TICKET_PROVIDED;
+        }
+        if (returnedDate.equals(LocalDateTime.MAX)) {
+            return Messenger.fetchMessage(NO_HIT_NUMBERS);
         }
         LocalDateTime drawDate = Mapper.mapDate(dto);
         Map<UUID, Integer> resultMap = Mapper.mappingToMap(dto);

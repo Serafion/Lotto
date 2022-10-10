@@ -2,7 +2,6 @@ package pl.lotto.resultchecker;
 
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 import pl.lotto.resultchecker.checkerdto.CheckerDto;
-import pl.lotto.winningnumbergenerator.winningnumbersdto.WinningNumbersDto;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -23,12 +22,6 @@ class ResultCheckerDtoMapper {
         }
         return map;
     }
-//    static Map<UUID,Integer> checkerRepoToMap(List<UUID> uuidList, Integer){
-//
-//    }
 
-    static List<Integer> mapWinningNumbersList(WinningNumbersDto dto) {
-        return dto.winningNumbers();
-    }
 
 }
