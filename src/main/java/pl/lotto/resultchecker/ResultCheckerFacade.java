@@ -1,6 +1,5 @@
 package pl.lotto.resultchecker;
 
-import pl.lotto.numberprovider.NumberProviderFacade;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 import pl.lotto.resultchecker.checkerdto.CheckerDto;
 import pl.lotto.resultchecker.repository.ResultCheckerRepository;
@@ -13,15 +12,14 @@ public class ResultCheckerFacade {
     private final ResultCheckerRepository resultCheckerRepository;
     private final NumberReceiverFacade numberReceiverFacade;
     private final ResultCalculator calculator;
+    private final NumberProvider numberProvider;
 
-    private final NumberProviderFacade numberProviderFacade;
 
-
-    public ResultCheckerFacade(NumberReceiverFacade numberReceiverFacade, ResultCheckerRepository inputRepository, ResultCalculator calculator, NumberProviderFacade numberProviderFacade) {
+    public ResultCheckerFacade(NumberReceiverFacade numberReceiverFacade, ResultCheckerRepository inputRepository, ResultCalculator calculator, NumberProvider numberProvider) {
         this.numberReceiverFacade = numberReceiverFacade;
         this.resultCheckerRepository = inputRepository;
         this.calculator = calculator;
-        this.numberProviderFacade = numberProviderFacade;
+        this.numberProvider = numberProvider;
     }
 
     public CheckerDto checkWinners(UUID uuid) {
@@ -46,7 +44,7 @@ public class ResultCheckerFacade {
     private List<Integer> fetchWonNumbers(LocalDateTime drawDate) {
 //        return ResultCheckerDtoMapper.mapWinningNumbersList(numbersGeneratorFacade.retrieveWonNumbersForDate(drawDate));
         try {
-            return numberProviderFacade.getWinningNumbers(drawDate);
+            return numberProvider.getWinningNumbers(drawDate);
         } catch (Exception e) {
             return List.of();
         }

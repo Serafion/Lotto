@@ -17,7 +17,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-import pl.lotto.numberprovider.NumberProviderFacade;
+import pl.lotto.numberprovider.NumberProviderClient;
 import pl.lotto.resultannouncer.repository.WinnerRepository;
 import pl.lotto.resultchecker.repository.ResultCheckerRepository;
 
@@ -45,7 +45,7 @@ public class BaseIntegrationTest {
     @Autowired
     public ResultCheckerRepository resultCheckerRepository;
     @Autowired
-    NumberProviderFacade numberProviderFacade;
+    NumberProviderClient numberProvider;
     @Autowired
     private WireMockServer wireMockServer;
     @Container

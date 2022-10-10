@@ -5,12 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import pl.lotto.resultchecker.NumberProvider;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
-public class NumberProviderFacade {
+public class NumberProviderClient implements NumberProvider {
 
     RestTemplate restTemplate = new RestTemplate();
     ObjectMapper mapper = new ObjectMapper();

@@ -2,7 +2,7 @@ package pl.lotto.resultchecker;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.lotto.numberprovider.NumberProviderFacade;
+import pl.lotto.numberprovider.NumberProviderClient;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 import pl.lotto.resultchecker.repository.ResultCheckerRepository;
 
@@ -20,12 +20,12 @@ public class ResultCheckerConfiguration {
     public ResultCheckerFacade resultCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                                    ResultCheckerRepository resultCheckerRepository,
                                                    ResultCalculator calculator,
-                                                   NumberProviderFacade numberProviderFacade) {
-        return new ResultCheckerFacade(numberReceiverFacade, resultCheckerRepository, calculator, numberProviderFacade);
+                                                   NumberProvider numberProvider) {
+        return new ResultCheckerFacade(numberReceiverFacade, resultCheckerRepository, calculator, numberProvider);
     }
 
-    public ResultCheckerFacade buildModuleForTest(NumberReceiverFacade numberReceiverFacade, ResultCheckerRepository inputRepository, NumberProviderFacade numberProviderFacade) {
+    public ResultCheckerFacade buildModuleForTest(NumberReceiverFacade numberReceiverFacade, ResultCheckerRepository inputRepository, NumberProviderClient numberProvider) {
         ResultCalculator calculator = new ResultCalculator();
-        return resultCheckerFacade(numberReceiverFacade, inputRepository, calculator, numberProviderFacade);
+        return resultCheckerFacade(numberReceiverFacade, inputRepository, calculator, numberProvider);
     }
 }
