@@ -1,13 +1,14 @@
 package pl.lotto.resultchecker;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.lotto.numberprovider.NumberProviderFacade;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 import pl.lotto.resultchecker.checkerdto.CheckerDto;
-import pl.lotto.winningnumbergenerator.WiningNumbersGeneratorFacade;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+//To do add new test to check additional behaviour ex. returning LocalDateTime.MIN and MAX
 
 @ExtendWith(MockitoExtension.class)
 class ResultCheckerFacadeTest implements SampleUserUuid {
@@ -29,7 +31,7 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
     Constants constants = new Constants();
     @InjectMocks
     NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
-    WiningNumbersGeneratorFacade numbersGeneratorFacade = mock(WiningNumbersGeneratorFacade.class);
+    NumberProviderFacade numberProviderFacade = mock(NumberProviderFacade.class);
 //    @Test
 //    @DisplayName("Should return lists of won numbers which contain hit 6 numbers")
 //    void should_return_list_of_winning_number() {
@@ -55,14 +57,14 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
 
     @Test
     @DisplayName("Should return lists of won numbers which contain hit six numbers and five numbers")
-    void should_return_list_of_with_two_winning_numbers() {
+    void should_return_list_of_with_two_winning_numbers() throws JsonProcessingException {
         //Given
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
-        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest());
+        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, new InputRepositoryTest(), numberProviderFacade);
         LocalDateTime dateTime = constants.dateOfDraw;
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
         given(numberReceiverFacade.outputDrawTime(constants.uuid)).willReturn(Optional.of(dateTime));
-        given(numbersGeneratorFacade.retrieveWonNumbersForDate(dateTime)).willReturn(constants.winningNumbers);
+        given(numberProviderFacade.getWinningNumbers(dateTime)).willReturn(constants.numbers);
 
 
         //When
@@ -78,20 +80,20 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
 
     @Test
     @DisplayName("Should return empty map when invalid uuid provided")
-    void should_empty_map_when_invalid_uuid() {
+    void should_empty_map_when_invalid_uuid() throws JsonProcessingException {
         //Given
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
-        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest());
+        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, new InputRepositoryTest(), numberProviderFacade);
         LocalDateTime dateTime = constants.dateOfDraw;
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
         given(numberReceiverFacade.outputDrawTime(constants.uuid2)).willReturn(Optional.of(dateTime));
-        given(numbersGeneratorFacade.retrieveWonNumbersForDate(dateTime)).willReturn(constants.winningNumbers);
+        given(numberProviderFacade.getWinningNumbers(dateTime)).willReturn(constants.numbers);
 
 
         //When
         Map<UUID, Integer> expectedMap = new HashMap<>();
         CheckerDto result = resultCheckerFacade.checkWinners(constants.uuid2);
-        CheckerDto expected = new CheckerDto(expectedMap, LocalDateTime.MIN);
+        CheckerDto expected = new CheckerDto(expectedMap, LocalDateTime.MAX);
 
         //Then
         assertThat(result).isEqualTo(expected);
