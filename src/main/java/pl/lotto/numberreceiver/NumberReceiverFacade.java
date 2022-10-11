@@ -1,7 +1,6 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
-import pl.lotto.numberreceiver.repository.UserInput;
 import pl.lotto.numberreceiver.repository.UserInputRepository;
 
 import java.time.LocalDateTime;
@@ -25,8 +24,9 @@ public class NumberReceiverFacade {
     }
 
     public List<NumberReceiverResultDto> retrieveNumbersForDate(LocalDateTime date) {
-        List<UserInput> queryResults = userInputRepository.findAllByDate(date);
-        return queryResults.stream().map(x -> RecordMapper.toDto(x)).collect(Collectors.toList());
+        return userInputRepository.findAllByDate(date).stream()
+                .map(RecordMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     public NumberReceiverResultDto inputNumbers(List<Integer> numbersFromUser) {
@@ -35,10 +35,9 @@ public class NumberReceiverFacade {
     }
 
     private NumberReceiverResultDto fetchDto(List<Integer> numbersFromUser, ValidateMessage validationMessage) {
-        if (!validationMessage.equals(ValidateMessage.CORRECT_MESSAGE)) {
-            return emptyDto(numbersFromUser, validationMessage);
-        }
-        return validDto(numbersFromUser, validationMessage);
+        return validationMessage.equals(ValidateMessage.CORRECT_MESSAGE) ?
+                validDto(numbersFromUser, validationMessage) :
+                emptyDto(numbersFromUser, validationMessage);
     }
 
     private NumberReceiverResultDto emptyDto(List<Integer> numbersFromUser, ValidateMessage validationMessage) {

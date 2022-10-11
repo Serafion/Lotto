@@ -18,7 +18,6 @@ public class NumberProviderClient implements NumberProvider {
 
             String date = localDateTime.toLocalDate().toString();
             String uri = "http://localhost:1443/get_numbers?date=" + date + "&pswd=abc";
-//            String uri = "http://" + host + "/get_numbers?date=" + date + "&pswd=abc";
             ResponseEntity<List> result = restTemplate.getForEntity(uri, List.class);
             log.info(restTemplate.getForEntity(uri, List.class).getStatusCode().toString());
             return result.getBody();

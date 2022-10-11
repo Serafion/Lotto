@@ -33,7 +33,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
         classes = LottoApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "application.environment=integration")
-//@ContextConfiguration(classes = MutableClock.class)
 @Import(TestConfig.class)
 @Testcontainers
 @ContextConfiguration(initializers = {WireMockInitializer.class})
@@ -71,14 +70,10 @@ public class BaseIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         map.put(date.getName(), date);
         map.put(pswd.getName(), pswd);
-//        configureFor("http://numbergetter.pl",0);
         wireMockServer.stubFor(get("/get_numbers?date=2022-02-12&pswd=abc").willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withJsonBody(Body.fromJsonBytes(objectMapper.writeValueAsBytes(List.of(1, 2, 3, 4, 5, 6))).asJson()).withStatusMessage("it worked somehow")
-//                                                                            .withBody("{[1,2,3,4,5,6]}")
-        ));
-
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withJsonBody(Body.fromJsonBytes(objectMapper.writeValueAsBytes(List.of(1, 2, 3, 4, 5, 6))).asJson()).withStatusMessage("it worked somehow")));
 
         //reset clock for tests
         clock.setToday(LocalDateTime.of(2022, 02, 12, 10, 11, 00).atZone(ZoneId.systemDefault()));
@@ -93,20 +88,9 @@ public class BaseIntegrationTest {
         this.wireMockServer.resetAll();
     }
 
-
-//    @Bean
-//    ZonedDateTime zonedDateTime(){
-//      return LocalDateTime.of(2022,02,12,10,11,00).atZone(ZoneId.systemDefault());
-//    }
-
     static {
         mongoDBContainer.start();
         System.setProperty("DB_PORT", String.valueOf(mongoDBContainer.getFirstMappedPort()));
     }
 
-//    @Bean
-//    @Primary
-//    public Clock mutableClock(){
-//        return new MutableClock(LocalDateTime.of(2022,02,12,10,11,00).atZone(ZoneId.systemDefault()));
-//    }
 }

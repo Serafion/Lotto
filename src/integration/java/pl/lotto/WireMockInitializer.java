@@ -23,9 +23,5 @@ public class WireMockInitializer implements ApplicationContextInitializer<Config
         applicationContext.getBeanFactory()
                 .registerSingleton("wireMockServer", wireMockServer);
 
-//        TestPropertyValues
-//                .of(Map.of("numbergenerator_base_url", wireMockServer.baseUrl()))
-//                .applyTo(applicationContext);
-
     }
 }

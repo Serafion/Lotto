@@ -1,7 +1,6 @@
 package pl.lotto.features;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.matching.StringValuePattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,8 @@ import pl.lotto.infrastructure.numberreceiver.endpoint.InputNumbersRequest;
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -64,9 +60,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
                 .content(objectMapper.writeValueAsString(inputNumbersRequest))
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
 
-//        clock.setToday();
-
-
         //When
         String stringResponse = mvcResult.getResponse().getContentAsString();
         System.out.println(stringResponse + "WAS THE RESPONSE AT DATE" + LocalDateTime.now(clock));
@@ -98,7 +91,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
     @DisplayName("Should return won six numbers")
     public void should_return_won_6_numbers_if_valid_ticket_won() throws Exception {
         //Given
-        //Input numbers part
         InputNumbersRequest inputNumbersRequest = new InputNumbersRequest();
         inputNumbersRequest.setNumbers("1,2,3,4,5,6");
         MvcResult inputNumbersRequestMvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/process")
@@ -118,12 +110,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
         //Given
         clock.addDays(7);
-        StringValuePattern pswd = equalTo("abc");
-        StringValuePattern date = equalTo("2022-02-12");
-        Map<String, StringValuePattern> map = new HashMap<>();
-        map.put(pswd.getName(), pswd);
-        map.put(date.getName(), date);
-//        stubFor(WireMock.get("http://localhost:1443/get_numbers").withQueryParams(map).willReturn(aResponse().withStatus(200).withHeader("Content-Type",MediaType.APPLICATION_JSON_VALUE).withBody("{[1,2,3,4,5,6]}")));
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")
