@@ -22,8 +22,6 @@ public class NumberReceiverController {
 
     @GetMapping("/hello")
     public ResponseEntity<String> f() {
-//        List<Integer> numbersFromUser = ;
-//        numberReceiverFacade.inputNumbers(numbersFromUser);
         if (true) {
             return ResponseEntity.ok("Hello");
         } else {
