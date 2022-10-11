@@ -29,24 +29,14 @@ class ResultCalculator {
     }
 
     private void addContent(Map<UUID, Integer> map, UUID uuid, List<Integer> inputs) {
-        Integer hitNumbers = calculateHitNumbers(winningNumbers, inputs);
+        Integer hitNumbers = calculateHitNumbers(inputs, winningNumbers);
         if (hitNumbers > MINIMUM_HIT_NUMBERS) {
             map.put(uuid, hitNumbers);
         }
     }
 
-    private int calculateHitNumbers(List<Integer> input, List<Integer> drawnNumbers) {
-        Set<Integer> wonNumbers = convertToSet(drawnNumbers);
-        int hitNumbers = 0;
-        for (Integer i : input) {
-            if (wonNumbers.contains(i)) {
-                hitNumbers++;
-            }
-        }
-        return hitNumbers;
+    private Integer calculateHitNumbers(List<Integer> input, List<Integer> drawnNumbers) {
+        Set<Integer> wonNumbers = new HashSet<>(drawnNumbers);
+        return (int) input.stream().filter(wonNumbers::contains).count();
     }
-    private Set<Integer> convertToSet(List<Integer> drawnNumbers) {
-        return new HashSet<>(drawnNumbers);
-    }
-
 }

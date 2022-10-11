@@ -25,7 +25,7 @@ public class ResultCheckerFacade {
     public CheckerDto checkWinners(UUID uuid) {
         Optional<LocalDateTime> drawDate = numberReceiverFacade.outputDrawTime(uuid);
         // return empty map and min Local Date Time for invalid UUID, fast ends further calculations
-        if (!drawDate.isPresent()) {
+        if (drawDate.isEmpty()) {
             return new CheckerDto(new HashMap<>(), LocalDateTime.MIN);
         }
         // return calculated results if they exist
@@ -42,10 +42,10 @@ public class ResultCheckerFacade {
     }
 
     private List<Integer> fetchWonNumbers(LocalDateTime drawDate) {
-//        return ResultCheckerDtoMapper.mapWinningNumbersList(numbersGeneratorFacade.retrieveWonNumbersForDate(drawDate));
         try {
             return numberProvider.getWinningNumbers(drawDate);
         } catch (Exception e) {
+            e.printStackTrace();
             return List.of();
         }
     }

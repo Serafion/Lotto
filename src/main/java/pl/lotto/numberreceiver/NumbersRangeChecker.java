@@ -5,22 +5,21 @@ import java.util.List;
 import static pl.lotto.numberreceiver.Constants.*;
 
 class NumbersRangeChecker implements Conditionable {
-    @Override
-    public ValidateMessage validateCondition(List<Integer> list) {
-        int listLength = list.size();
-        int listLengthOfValidNumbers = 0;
-        for (Integer i : list) {
-            if (isInRange(i)) {
-                listLengthOfValidNumbers++;
-                if (listLengthOfValidNumbers > NUMBERS_TO_DRAW) {
-                    return ValidateMessage.NUMBERS_OUT_OF_RANGE;
-                }
-            }
-        }
-        return listLength == listLengthOfValidNumbers ? ValidateMessage.CORRECT_MESSAGE : ValidateMessage.NUMBERS_OUT_OF_RANGE;
+    static boolean isInRange(Integer number) {
+        return number >= LOW_NUMBER_BOUNDRY && number <= HIGH_NUMBER_BOUNDRY;
     }
 
-    boolean isInRange(Integer number) {
-        return number >= LOW_NUMBER_BOUNDRY && number <= HIGH_NUMBER_BOUNDRY;
+    @Override
+    public ValidateMessage validateCondition(List<Integer> list) {
+        return list.size() == getValidNumbers(list) ?
+                ValidateMessage.CORRECT_MESSAGE :
+                ValidateMessage.NUMBERS_OUT_OF_RANGE;
+    }
+
+    private int getValidNumbers(List<Integer> list) {
+        return (int) list.stream()
+                .filter(NumbersRangeChecker::isInRange)
+                .limit(NUMBERS_TO_DRAW)
+                .count();
     }
 }
