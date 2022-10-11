@@ -32,7 +32,7 @@ public class ResultCheckerFacade {
         if (resultCheckerRepository.existsById(drawDate.get())) {
             return resultCheckerRepository.findById(drawDate.get()).get();
         }
-        // drawDateRepository.save(new CheckerRepoEntity(uuid, drawDate));
+        // calculate and save results
         Map<UUID, List<Integer>> inputs = fetchInputMap(drawDate.get());
         List<Integer> wonNumbers = fetchWonNumbers(drawDate.get());
         Map<UUID, Integer> map = calculator.calculateResults(inputs, wonNumbers);
@@ -53,7 +53,6 @@ public class ResultCheckerFacade {
     private Map<UUID, List<Integer>> fetchInputMap(LocalDateTime drawDate) {
         return ResultCheckerDtoMapper.mapReceiverDtoToMap(numberReceiverFacade.retrieveNumbersForDate(drawDate));
     }
-
 
     private CheckerDto fetchCheckerDto(Map<UUID, Integer> map, LocalDateTime dateTime) {
         return ResultCheckerDtoMapper.mapToCheckerDto(map, dateTime);

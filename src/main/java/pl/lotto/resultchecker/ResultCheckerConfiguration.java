@@ -8,13 +8,6 @@ import pl.lotto.resultchecker.repository.ResultCheckerRepository;
 
 @Configuration
 public class ResultCheckerConfiguration {
-//    public ResultCheckerFacade buildModuleForProduction(){
-//        NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().buildDefaultModuleForProduction();
-//        WiningNumbersGeneratorFacade winingNumbersGeneratorFacade = new WiningNumberGeneratorConfiguration().buildDefaultModuleForProduction();
-//
-//        return buildModuleForProduction(numberReceiverFacade,winingNumbersGeneratorFacade);
-//    }
-
 
     @Bean
     public ResultCheckerFacade resultCheckerFacade(NumberReceiverFacade numberReceiverFacade,

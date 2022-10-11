@@ -6,8 +6,7 @@ import java.util.List;
 class DuplicateChecker implements Conditionable {
 
     private static int countNumbersFromUser(List<Integer> list) {
-        return new HashSet<>(list)
-                .size();
+        return new HashSet<>(list).size();
     }
 
     @Override

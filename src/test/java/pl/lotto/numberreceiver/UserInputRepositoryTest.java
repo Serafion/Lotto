@@ -29,17 +29,6 @@ public class UserInputRepositoryTest implements UserInputRepository {
     public List<UserInput> findAllByDate(LocalDateTime date) {
         return records.get(date);
     }
-
-    @Override
-    public boolean existsByDate(LocalDateTime dateTime) {
-        return records.containsKey(dateTime);
-    }
-
-    @Override
-    public UserInput findFirstByDate(LocalDateTime date) {
-        return null;
-    }
-
     @Override
     public <S extends UserInput> List<S> saveAll(Iterable<S> entities) {
         return null;
