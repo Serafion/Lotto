@@ -245,4 +245,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(response.getContentAsString()).isEqualTo("Invalid UUID data provided");
     }
+
+
 }

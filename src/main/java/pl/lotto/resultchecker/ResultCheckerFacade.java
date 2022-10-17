@@ -29,25 +29,17 @@ public class ResultCheckerFacade {
             return new CheckerDto(new HashMap<>(), LocalDateTime.MIN);
         }
         // return calculated results if they exist
-        if (resultCheckerRepository.existsById(drawDate.get())) {
-            return resultCheckerRepository.findById(drawDate.get()).get();
+        LocalDateTime id = drawDate.get();
+        if (resultCheckerRepository.existsById(id)) {
+            return resultCheckerRepository.findById(id).get();
         }
         // drawDateRepository.save(new CheckerRepoEntity(uuid, drawDate));
-        Map<UUID, List<Integer>> inputs = fetchInputMap(drawDate.get());
-        List<Integer> wonNumbers = fetchWonNumbers(drawDate.get());
+        Map<UUID, List<Integer>> inputs = fetchInputMap(id);
+        List<Integer> wonNumbers = numberProvider.getWinningNumbers(id);
         Map<UUID, Integer> map = calculator.calculateResults(inputs, wonNumbers);
-        CheckerDto result = fetchCheckerDto(map, drawDate.get());
+        CheckerDto result = fetchCheckerDto(map, id);
         resultCheckerRepository.save(result);
         return map.containsKey(uuid) ? result : ResultCheckerDtoMapper.mapToCheckerDto(new HashMap<>(), LocalDateTime.MAX);
-    }
-
-    private List<Integer> fetchWonNumbers(LocalDateTime drawDate) {
-        try {
-            return numberProvider.getWinningNumbers(drawDate);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
     }
 
     private Map<UUID, List<Integer>> fetchInputMap(LocalDateTime drawDate) {
