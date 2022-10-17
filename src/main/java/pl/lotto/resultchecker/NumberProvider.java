@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface NumberProvider {
 
-    List getWinningNumbers(LocalDateTime localDateTime) throws JsonProcessingException;
+    List<Integer> getWinningNumbers(LocalDateTime localDateTime);
 }

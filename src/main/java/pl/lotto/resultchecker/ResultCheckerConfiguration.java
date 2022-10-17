@@ -2,7 +2,7 @@ package pl.lotto.resultchecker;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.lotto.numberprovider.NumberProviderClient;
+import pl.lotto.infrastructure.httpclient.resultchecker.NumberProviderClient;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 import pl.lotto.resultchecker.repository.ResultCheckerRepository;
 
