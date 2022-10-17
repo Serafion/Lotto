@@ -1,6 +1,7 @@
 package pl.lotto.infrastructure.numberannouncer.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class ResultAnnouncerController {
     public ResponseEntity<String> getResults(@RequestBody ResultRequest resultRequest) {
         Optional<UUID> uuid = getUUID(resultRequest.getUuid());
         return uuid.map(value -> ResponseEntity.ok(resultAnnouncerFacade.checkWinner(value)))
-                .orElseGet(() -> ResponseEntity.status(400).body("Invalid UUID data provided"));
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid UUID data provided"));
     }
 
     private Optional<UUID> getUUID(String input) {

@@ -52,7 +52,13 @@ public class NumberReceiverFacade {
         return dto;
     }
 
-    public Optional<LocalDateTime> outputDrawTime(UUID uuid) {
-        return userInputRepository.findById(uuid).isPresent() ? Optional.of(userInputRepository.findById(uuid).get().date()) : Optional.empty();
+    public LocalDateTime outputDrawTime(UUID uuid) {
+        UserInput id = userInputRepository.findById(uuid)
+                .orElseThrow( () -> new UserInputNotFoundException("user input not found"));
+
+        return id.isPresent() ?
+                Optional.of(id.get().date())
+                :
+                Optional.empty();
     }
 }

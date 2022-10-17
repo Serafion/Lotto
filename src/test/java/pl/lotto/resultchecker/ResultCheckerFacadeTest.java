@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.lotto.numberprovider.NumberProviderClient;
+import pl.lotto.infrastructure.httpclient.resultchecker.NumberProviderClient;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 import pl.lotto.resultchecker.checkerdto.CheckerDto;
 
