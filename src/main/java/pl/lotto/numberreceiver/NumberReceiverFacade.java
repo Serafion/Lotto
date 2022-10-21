@@ -1,6 +1,7 @@
 package pl.lotto.numberreceiver;
 
 import pl.lotto.numberreceiver.dto.NumberReceiverResultDto;
+import pl.lotto.numberreceiver.repository.UserInput;
 import pl.lotto.numberreceiver.repository.UserInputRepository;
 
 import java.time.LocalDateTime;
@@ -55,10 +56,6 @@ public class NumberReceiverFacade {
     public LocalDateTime outputDrawTime(UUID uuid) {
         UserInput id = userInputRepository.findById(uuid)
                 .orElseThrow( () -> new UserInputNotFoundException("user input not found"));
-
-        return id.isPresent() ?
-                Optional.of(id.get().date())
-                :
-                Optional.empty();
+        return id.date();
     }
 }

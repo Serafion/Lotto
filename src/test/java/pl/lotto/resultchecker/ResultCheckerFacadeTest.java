@@ -16,7 +16,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,7 +62,7 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, new InputRepositoryTest(), numberProvider);
         LocalDateTime dateTime = constants.dateOfDraw;
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
-        given(numberReceiverFacade.outputDrawTime(constants.uuid)).willReturn(Optional.of(dateTime));
+        given(numberReceiverFacade.outputDrawTime(constants.uuid)).willReturn((dateTime));
         given(numberProvider.getWinningNumbers(dateTime)).willReturn(constants.numbers);
 
 
@@ -86,7 +85,7 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, new InputRepositoryTest(), numberProvider);
         LocalDateTime dateTime = constants.dateOfDraw;
         given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
-        given(numberReceiverFacade.outputDrawTime(constants.uuid2)).willReturn(Optional.of(dateTime));
+        given(numberReceiverFacade.outputDrawTime(constants.uuid2)).willReturn(dateTime);
         given(numberProvider.getWinningNumbers(dateTime)).willReturn(constants.numbers);
 
 

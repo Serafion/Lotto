@@ -1,7 +1,6 @@
 package pl.lotto;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import pl.lotto.resultchecker.repository.ResultCheckerRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @SpringBootTest(
         classes = LottoApplication.class,
@@ -62,7 +62,7 @@ public class BaseIntegrationTest {
 
     @BeforeEach
     void reset() throws JsonProcessingException {
-        testtttt.setUpGetNumbersEndpoint(wireMockServer, List.of(1, 2, 3, 4, 5, 6));
+        testtttt.setUpGetNumbersEndpoint(List.of(1, 2, 3, 4, 5, 6));
 
         //reset clock for tests
         clock.setToday(LocalDateTime.of(2022, 02, 12, 10, 11, 00).atZone(ZoneId.systemDefault()));

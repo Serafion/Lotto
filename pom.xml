@@ -97,6 +97,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>dev.alexengrig</groupId>
+            <artifactId>codecov-maven-plugin</artifactId>
+            <version>1.0</version>
+            <type>maven-plugin</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.cloudyrock.mongock</groupId>
             <artifactId>mongock-spring-v5</artifactId>
         </dependency>
