@@ -148,14 +148,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
         //Given
         clock.addDays(7);
-//        StringValuePattern pswd = equalTo("abc");
-//        StringValuePattern date = equalTo("2022-02-12");
-//        Map<String,StringValuePattern> map = new HashMap<>();
-//        map.put(pswd.getName(),pswd);
-//        map.put(date.getName(),date);
-//        configureFor("http://numbergetter.pl",0);
-//        stubFor(get("/get_numbers").withQueryParams(map).willReturn(aResponse().withStatus(200).withBody("{[1,2,3,4,5,6]}")));
-//////        ?pswd=abc&date=2022-02-12
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")
