@@ -1,6 +1,5 @@
 package pl.lotto.resultchecker;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,32 +30,10 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
     @InjectMocks
     NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
     NumberProviderClient numberProvider = mock(NumberProviderClient.class);
-//    @Test
-//    @DisplayName("Should return lists of won numbers which contain hit 6 numbers")
-//    void should_return_list_of_winning_number() {
-//        //Given
-//        Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
-//        ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, numbersGeneratorFacade, clock, new InputRepositoryTest());
-//        LocalDateTime dateTime = LocalDateTime.of(2022, 8, 13, 12, 0, 0);
-//        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
-//        List<NumberReceiverResultDto> dtoList = List.of(NumberReceiverMapper.toDto(ValidateMessage.CORRECT_MESSAGE, Optional.of(UUID.fromString("571fc5dd-b0ee-4557-90db-34c764273a8e")), numbers, Optional.of(dateTime)));
-//        given(numberReceiverFacade.outputDrawTime(sampleUserUuid())).willReturn(constants.dateOfDraw);
-//        given(numberReceiverFacade.retrieveNumbersForDate(dateTime)).willReturn(constants.resultsList);
-//        given(numbersGeneratorFacade.retrieveWonNumbersForDate(dateTime)).willReturn(constants.winningNumbers);
-//
-//        //When
-//        CheckerDto result = resultCheckerFacade.checkWinners(sampleUserUuid());
-//
-//        //Then
-//        Map<UUID, Integer> expected = new HashMap<>();
-////        UUID uuid = UUID.fromString("571fc5dd-b0ee-4557-90db-34c764273a8e");
-//        expected.put(sampleUserUuid(), 6);
-//        assertThat(result).isEqualTo(expected);
-//    }
 
     @Test
     @DisplayName("Should return lists of won numbers which contain hit six numbers and five numbers")
-    void should_return_list_of_with_two_winning_numbers() throws JsonProcessingException {
+    void should_return_list_of_with_two_winning_numbers() {
         //Given
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, new InputRepositoryTest(), numberProvider);
@@ -79,7 +56,7 @@ class ResultCheckerFacadeTest implements SampleUserUuid {
 
     @Test
     @DisplayName("Should return empty map when invalid uuid provided")
-    void should_empty_map_when_invalid_uuid() throws JsonProcessingException {
+    void should_empty_map_when_invalid_uuid() {
         //Given
         Clock clock = Clock.fixed(LocalDateTime.of(2022, 8, 15, 12, 0, 0).toInstant(ZoneOffset.ofHours(2)), ZoneId.systemDefault());
         ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().buildModuleForTest(numberReceiverFacade, new InputRepositoryTest(), numberProvider);

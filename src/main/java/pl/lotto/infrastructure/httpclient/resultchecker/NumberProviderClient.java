@@ -34,29 +34,13 @@ public class NumberProviderClient implements NumberProvider {
 
     public List<Integer> getWinningNumbers(LocalDateTime localDateTime) {
 
-//        try {
-//
-//            String date = localDateTime.toLocalDate().toString();
-//            String uri = "http://localhost:1443/get_numbers?date=" + date + "&pswd=abc";
-////            String uri = "http://" + host + "/get_numbers?date=" + date + "&pswd=abc";
-//            ResponseEntity<List> result = restTemplate.getForEntity(uri, List.class);
-//            log.info(restTemplate.getForEntity(uri, List.class).getStatusCode().toString());
-//            return result.getBody();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return List.of();
-//        }
-
-
         String date = localDateTime.toLocalDate().toString();
         UriComponents uriComponents = UriComponentsBuilder.newInstance().scheme("http").host(api_name)
                 .queryParam(DATE_PARAM_NAME, date)
                 .queryParam(PSWD, PSWD_VALUE).build();
-//        log.info("uri was: "+uri);
-//        "http://localhost:1443/get_numbers?date=" + date + "&pswd=abc";
+
 
         try {
-            System.out.println(uriComponents.toUriString());
             ResponseEntity<List<Integer>> result = restTemplate.exchange(
                     uriComponents.toUriString(),
                     HttpMethod.GET,

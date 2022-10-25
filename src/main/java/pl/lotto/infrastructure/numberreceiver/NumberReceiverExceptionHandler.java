@@ -14,6 +14,6 @@ public class NumberReceiverExceptionHandler {
     @ExceptionHandler({UserInputNotFoundException.class})
     public ResponseEntity<NumberRecieverErrorDto> f(UserInputNotFoundException e) {
         log.info(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

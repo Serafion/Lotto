@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,21 +33,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
-
-    @Test
-    public void sample_assertion() {
-        // given
-        String path = "/hello";
-
-        // when
-        ResponseEntity<String> forEntity = testRestTemplate.getForEntity(path, String.class);
-
-        // then
-        String body = forEntity.getBody();
-        HttpStatus status = forEntity.getStatusCode();
-        assertThat(body).isEqualTo("Hello");
-        assertThat(status).isEqualTo(HttpStatus.OK);
-    }
 
     @Test
     @DisplayName("Should return valid ticket for correct input")
@@ -106,7 +90,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
         assertThat(result.userNumbers()).isEqualTo(List.of(1, 2, 3, 4, 5, 6));
         assertThat(result.uniqueLotteryId().isPresent()).isTrue();
-        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 02, 12, 12, 00, 00).toString());
+        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 2, 12, 12, 0, 0).toString());
 
         //Given
         clock.addDays(7);
@@ -144,7 +128,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
         assertThat(result.userNumbers()).isEqualTo(List.of(1, 2, 3, 4, 5, 99));
         assertThat(result.uniqueLotteryId().isPresent()).isTrue();
-        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 02, 12, 12, 00, 00).toString());
+        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 2, 12, 12, 0, 0).toString());
 
         //Given
         clock.addDays(7);
@@ -183,7 +167,7 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
         assertThat(result.message()).isEqualTo("CORRECT_MESSAGE");
         assertThat(result.userNumbers()).isEqualTo(List.of(1, 2, 96, 97, 98, 99));
         assertThat(result.uniqueLotteryId().isPresent()).isTrue();
-        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 02, 12, 12, 00, 00).toString());
+        assertThat(result.dateOfDraw().get().toString()).isEqualTo(LocalDateTime.of(2022, 2, 12, 12, 0, 0).toString());
 
 
         //Given

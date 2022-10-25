@@ -1,5 +1,9 @@
 package pl.lotto.infrastructure.numberannouncer.endpoint;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +17,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@Slf4j
 public class ResultAnnouncerController {
 
     @Autowired
     ResultAnnouncerFacade resultAnnouncerFacade;
 
+    @Operation(summary = "Get winning numbers")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found your ticket"),
+            @ApiResponse(responseCode = "400", description = "Invalid UUID data provided"),
+            @ApiResponse(responseCode = "404", description = "Ticket not found")})
     @RequestMapping(value = "/get_results", method = RequestMethod.GET, headers = "Accept=application/json")
     public ResponseEntity<String> getResults(@RequestBody ResultRequest resultRequest) {
         Optional<UUID> uuid = getUUID(resultRequest.getUuid());
@@ -29,7 +39,8 @@ public class ResultAnnouncerController {
         try {
             return Optional.of(UUID.fromString(input));
         } catch (Exception e) {
-            e.getMessage();
+            log.info("error in getting UUID");
+            log.info(e.getMessage());
         }
         return Optional.empty();
     }
