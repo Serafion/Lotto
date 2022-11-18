@@ -172,8 +172,6 @@ public class PlayLottoIntegrationTest extends BaseIntegrationTest {
 
         //Given
         clock.addDays(7);
-//        configureFor("localhost",1443);
-//        stubFor(get("/get_numbers?pswd=abc&date=2022-02-12")).setResponse(aResponse().withStatus(200).withResponseBody(Body.ofBinaryOrText(objectMapper.writeValueAsBytes(List.of(1,2,3,4,5,6)), ContentTypeHeader.absent())).build());
         ResultRequest resultRequest = new ResultRequest();
         resultRequest.setUuid(result.uniqueLotteryId().get().toString());
         MvcResult resultAnnouncerResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_results")

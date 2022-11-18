@@ -10,7 +10,6 @@ import java.time.Clock;
 public class NumberReceiverConfiguration {
 
 
-    //Test of making spring boot working
     @Bean
     public NumberReceiverFacade numberReceiverFacade(UserInputRepository userInputRepository, Clock clock) {
         return buildModuleForProduction(new UuidGenerator(), userInputRepository, clock);

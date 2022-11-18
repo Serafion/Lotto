@@ -22,7 +22,6 @@ public class NumberProviderClient implements NumberProvider {
     public static final String PSWD_VALUE = "abc";
     public static final String DATE_PARAM_NAME = "date";
     private final RestTemplate restTemplate;
-
     private final String api_name;
 
 

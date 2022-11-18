@@ -32,11 +32,9 @@ public class ResultCheckerFacade {
             return new CheckerDto(new HashMap<>(), LocalDateTime.MIN);
         }
         // return calculated results if they exist
-//        LocalDateTime id = drawDate.get();
         if (resultCheckerRepository.existsById(drawDate)) {
             return resultCheckerRepository.findById(drawDate).get();
         }
-        // drawDateRepository.save(new CheckerRepoEntity(uuid, drawDate));
         Map<UUID, List<Integer>> inputs = fetchInputMap(drawDate);
         List<Integer> wonNumbers = numberProvider.getWinningNumbers(drawDate);
         Map<UUID, Integer> map = calculator.calculateResults(inputs, wonNumbers);
